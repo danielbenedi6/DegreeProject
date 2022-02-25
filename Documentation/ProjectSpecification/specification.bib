@@ -1,0 +1,87 @@
+@article{MARKRAM201139,
+title = {Introducing the Human Brain Project},
+journal = {Procedia Computer Science},
+volume = {7},
+pages = {39-42},
+year = {2011},
+note = {Proceedings of the 2nd European Future Technologies Conference and Exhibition 2011 (FET 11)},
+issn = {1877-0509},
+doi = {https://doi.org/10.1016/j.procs.2011.12.015},
+url = {https://www.sciencedirect.com/science/article/pii/S1877050911006806},
+author = {Henry Markram and Karlheinz Meier and Thomas Lippert and Sten Grillner and Richard Frackowiak and Stanislas Dehaene and Alois Knoll and Haim Sompolinsky and Kris Verstreken and Javier DeFelipe and Seth Grant and Jean-Pierre Changeux and Alois Saria},
+keywords = {Human brain, neuroscience, neuroinformatics, modeling, simulation, supercomputing, HPC, medicine, neuromorphics, neuroprosthetics, neurorobotics},
+abstract = {The Human Brain Project (HBP) is a candidate project in the European Union's FET Flagship Program, funded by the ICT Program in the Seventh Framework Program. The project will develop a new integrated strategy for understanding the human brain and a novel research platform that will integrate all the data and knowledge we can acquire about the structure and function of the brain and use it to build unifying models that can be validated by simulations running on supercomputers. The project will drive the development of supercomputing for the life sciences, generate new neuroscientific data as a benchmark for modeling, develop radically new tools for informatics, modeling and simulation, and build virtual laboratories for collaborative basic and clinical studies, drug simulation and virtual prototyping of neuroprosthetic, neuromorphic, and robotic devices.}
+}
+@article{FURBER2006,
+author = {Furber, Steve and Temple, Steve and Brown, Andrew},
+year = {2006},
+month = {01},
+pages = {},
+title = {High-performance computing for systems of spiking neurons},
+volume = {2}
+}
+@inproceedings{CHOI2010,
+author = {Choi, Byn and Komuravelli, Rakesh and Lu, Victor and Sung, Hyojin and Bocchino, Robert L. and Adve, Sarita V. and Hart, John C.},
+title = {Parallel SAH K-D Tree Construction},
+year = {2010},
+publisher = {Eurographics Association},
+address = {Goslar, DEU},
+abstract = {The k-D tree is a well-studied acceleration data structure for ray tracing. It is used to organize primitives in a scene to allow efficient execution of intersection operations between rays and the primitives. The highest quality k-D tree can be obtained using greedy cost optimization based on a surface area heuristc (SAH). While the high quality enables very fast ray tracing times, a key drawback is that the k-D tree construction time remains prohibitively expensive. This cost is unreasonable for rendering dynamic scenes for future visual computing applications on emerging multicore systems. Much work has therefore been focused on faster parallel k-D tree construction performance at the expense of approximating or ignoring SAH computation, which produces k-D trees that degrade rendering time. In this paper, we present two new parallel algorithms for building precise SAH-optimized k-D trees, with different tradeoffs between the total work done and parallel scalability. The algorithms achieve up to 8x speedup on 32 cores, without degrading tree quality and rendering time, yielding the best reported speedups so far for precise-SAH k-D tree construction.},
+booktitle = {Proceedings of the Conference on High Performance Graphics},
+pages = {77–86},
+numpages = {10},
+location = {Saarbrucken, Germany},
+series = {HPG '10}
+}
+@phdthesis{Adamsson_Vorkapic_2016,
+title={A comparison study of Kd-tree, Vp-tree and Octree for storing neuronal morphology data with respect to performance},
+url={http://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-187026},
+abstractNote={In this thesis we investigated performance of Kdtree, Vptree and Octree for storing neuronal morphology data. Two naive list structures were implemented to compare with the space partition data structures. The performance was measured with different sizes of neuronal networks and different types of test cases. A comparison with focus on cache misses, average search time and memory usage was made. Furthermore, measurements gathered quantitative data about each data structure. The results showed significant difference in performance of each data structure. It was concluded that Vptree is more suitable for searches in smaller populations of neurons and for specific nodes in larger populations, while Kdtree is better for volume searches in larger populations. Octree had highest average search time and memory requirement.},
+author={Adamsson, Marcus and Vorkapic, Aleksandar}, 
+year={2016}
+}
+@INPROCEEDINGS{7169256,
+
+  author={Hu, Linjia and Nooshabadi, Saeid and Ahmadi, Majid},
+
+  booktitle={2015 IEEE International Symposium on Circuits and Systems (ISCAS)}, 
+
+  title={Massively parallel KD-tree construction and nearest neighbor search algorithms}, 
+
+  year={2015},
+
+  volume={},
+
+  number={},
+
+  pages={2752-2755},
+
+  doi={10.1109/ISCAS.2015.7169256}
+}
+@article{LU2021,
+author = {Lu, Yucheng and Cheng, Luyu and Isenberg, Tobias and Fu, Chi-Wing and Chen, Guoning and Liu, Hui and Deussen, Oliver and Wang, Yunhai},
+title = {Curve Complexity Heuristic KD-trees for Neighborhood-based Exploration of 3D Curves},
+journal = {Computer Graphics Forum},
+volume = {40},
+number = {2},
+pages = {461-474},
+keywords = {CCS Concepts, Human-centered computing → Scientific visualization, Theory of computation → Nearest neighbor algorithms},
+doi = {https://doi.org/10.1111/cgf.142647},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.142647},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/cgf.142647},
+abstract = {Abstract We introduce the curve complexity heuristic (CCH), a KD-tree construction strategy for 3D curves, which enables interactive exploration of neighborhoods in dense and large line datasets. It can be applied to searches of k-nearest curves (KNC) as well as radius-nearest curves (RNC). The CCH KD-tree construction consists of two steps: (i) 3D curve decomposition that takes into account curve complexity and (ii) KD-tree construction, which involves a novel splitting and early termination strategy. The obtained KD-tree allows us to improve the speed of existing neighborhood search approaches by at least an order of magnitude (i. e., 28×for KNC and 12×for RNC with 98\% accuracy) by considering local curve complexity. We validate this performance with a quantitative evaluation of the quality of search results and computation time. Also, we demonstrate the usefulness of our approach for supporting various applications such as interactive line queries, line opacity optimization, and line abstraction.},
+year = {2021}
+}
+@online{NeuroMorpho,
+  author = { George Mason University},
+  title = {NeuroMorpho.Org - a centrally curated inventory of digitally reconstructed neurons and glia},
+  year = {2006-2022},
+  url = {http://neuromorpho.org/},
+  urldate = {2022-02-25}
+}
+@online{treem,
+  title={treem - neuron morphology processing tool},
+  url={https://pypi.org/project/treem/},
+  urldate = {2023-02-25}, 
+  author={Alexander Kozlov}
+}
