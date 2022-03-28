@@ -57,6 +57,10 @@ int main(int argc, char* argv[]){
 			usage(argv[0]);
 			return 128;
 	}
-	return 0;
+
+
+    node* tree = build_serial(parseFile(filename), 0, nullptr);
+
+    return 0;
 }
 

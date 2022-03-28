@@ -1,6 +1,9 @@
 Date;Begining;End;Description
-24/02/2022;21:10;22:25;Writing the Project Specification: Introduction and Problem Statement
-25/02/2022;00:00;00:30;Writing the Project Specification: Approach and References
-25/02/2022;10:50;13:00;Writing the Project Specification: Time plan and Fixing formating
+24/02/2022;21:10;22:25;Write Project Plan: Introduction and Problem Statement
+25/02/2022;00:00;00:30;Write Project Plan: Approach and References
+25/02/2022;10:50;13:00;Write Project Plan: Time plan and Fixing formating
 16/03/2022;19:30;20:35;Resource Retrieval: Getting some references
 17/03/2022;19:20;19:25;Environment Setup: Installing OpenMP
+24/03/2022;11:25;13:00;Implement basic models and test: Argmuent and file parsing
+27/03/2022;18:50;20:15;Implement basic models and test: Implement serial kd-tree
+28/03/2022;11:50;13:15;Implement basic models and test: Undurstanding implementation and OpenMP
