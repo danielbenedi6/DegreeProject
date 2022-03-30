@@ -7,3 +7,6 @@ Date;Begining;End;Description
 24/03/2022;11:25;13:00;Implement basic models and test: Argmuent and file parsing
 27/03/2022;18:50;20:15;Implement basic models and test: Implement serial kd-tree
 28/03/2022;11:50;13:15;Implement basic models and test: Undurstanding implementation and OpenMP
+29/03/2022;17:15;18:45;Implement basic models and test: Debugging serial kd-tree and implementing parallel kd-tree
+30/03/2022;10:30;11:15;Implement basic models and test: Implementing parallel kd-tree
+30/03/2022:11:15;;Experiment and acquire metrics: Benchmarking serial and parallel kd-tree

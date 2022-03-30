@@ -27,7 +27,7 @@ GEN_DOCS = latex
 
 #---------------------------------------------------------
 # flags
-CPPFLAGS= -g -O2 -std=gnu++11 -fopenmp
+CPPFLAGS= -O3 -std=gnu++11 -fopenmp -pthread -g
 
 all: $(EXEC)
 #---------------------------------------------------------

@@ -11,11 +11,11 @@
 struct neuron{
 	std::uint64_t sample;
 	std::uint64_t parent;
-	std::uint8_t  type;
 	double   x;
 	double   y;
 	double   z;
 	double   radius;
+    std::uint8_t  type;
 };
 
 std::vector<neuron> parseFile(std::string filename);

@@ -7,9 +7,9 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 #include "SWC.hpp"
 #include "K-d_tree.hpp"
-
 void usage(char name[]){
 	std::cout << "Usage:" << name << " [param] filename" << std::endl;
 	std::cout << "Param: (Default -c)" << std::endl;
@@ -19,6 +19,19 @@ void usage(char name[]){
 	std::cout << "    -p2         Parallel Kd-tree with Curve Complexity heuristic." << std::endl;
 	std::cout << "    -p3         Parallel Kd-tree with ToBeDefined heuristic." << std::endl;
 	std::cout << "filename    File with the neuronal network with SWC format." << std::endl;
+}
+
+void print(node* root, int depth){
+    if(root != nullptr){
+        for(int i = 0; i < depth-1; i++)
+            std::cout << "|\t";
+        if (depth > 0)
+            std::cout << "|--";
+
+        std::cout << "(" << root->data.x << "," << root->data.y << "," << root->data.z  << ") -> " << root->data.sample << ":" << root->data.type << " = " << root->data.radius << std::endl;
+        print(root->left, depth+1);
+        print(root->right, depth+1);
+    }
 }
 
 int main(int argc, char* argv[]){
@@ -59,7 +72,26 @@ int main(int argc, char* argv[]){
 	}
 
 
-    node* tree = build_serial(parseFile(filename), 0, nullptr);
+    //std::cout << "Reading file: " << filename;
+    auto neurons = parseFile(filename);
+    //std::cout << " Done!" << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
+    node* tree;
+    if(parallel){
+        tree = build_parallel(neurons, 0, nullptr);
+        end = std::chrono::high_resolution_clock::now();
+    }else{
+        tree = build_serial(neurons, 0, nullptr);
+        end = std::chrono::high_resolution_clock::now();
+    }
+
+    //print(tree, 0);
+    free(tree);
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    std::cout << duration << " us" << std::endl;
 
     return 0;
 }
