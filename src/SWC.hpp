@@ -9,15 +9,25 @@
  * http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html
  */
 struct neuron{
-	std::uint64_t sample;
-	std::uint64_t parent;
+	std::int64_t sample;
+	std::int64_t parent;
 	double   x;
 	double   y;
 	double   z;
 	double   radius;
-    std::uint8_t  type;
+    std::int8_t  type;
 };
 
+/**
+ *
+ * @param filename
+ * @return
+ */
 std::vector<neuron> parseFile(std::string filename);
 
+/**
+ *
+ * @param input
+ * @return
+ */
 neuron* getNeuron(std::istream& input);

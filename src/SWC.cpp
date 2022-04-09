@@ -1,5 +1,7 @@
 #include "SWC.hpp"
+#include <regex>
 #include <sstream>
+#include <iostream>
 
 /*
 struct neuron{
@@ -13,8 +15,19 @@ struct neuron{
 }
 */
 
+const std::regex regex_comment("#.*");
+const std::regex regex_trimming("(^\\s+)|(\\s+$)");
+
+
 std::vector<neuron> parseFile(std::string filename){
-	std::ifstream file(filename);
+	std::ifstream file;
+    file.open(filename);
+
+    if(!file){
+        std::cerr << "Error: File " << filename << " not found." << std::endl;
+        exit(1);
+    }
+
 	std::vector<neuron> output;
 
 	while(!file.eof()){
@@ -28,11 +41,13 @@ std::vector<neuron> parseFile(std::string filename){
 }
 
 neuron* getNeuron(std::istream& input){
-	std::string line;	
+	std::string line;
 	do{
 		getline(input, line);
+        line = std::regex_replace(line, regex_comment, "");
+        line = std::regex_replace(line, regex_trimming, "");
 		if(input.eof()) return nullptr;
-	}while(line.at(0) == '#');
+	}while(line.size() == 0);
 
 	std::stringstream buff(line);
 	neuron* res = new neuron();
@@ -44,11 +59,6 @@ neuron* getNeuron(std::istream& input){
 	buff >> res->z;
 	buff >> res->radius;
 	buff >> res->parent;
-
-	if(buff.eof()){
-		delete res;
-		return nullptr;
-	}
 
 	return res;
 }
