@@ -1,6 +1,8 @@
 Documentation/Papers/*.pdf
 .idea
-
+bin
+*.csv
+Documentation/ProjectSpecification/GanttDiagram.pdf
 
 # Prerequisites
 *.d

@@ -21,4 +21,6 @@ for exec in data["type"].unique():
     plt.plot(neurons,means)
 plt.legend(data["type"].unique())
 plt.yscale('log')
+plt.ylabel('Time (µs)')
+plt.xlabel('Nuerons')
 plt.show()

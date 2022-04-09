@@ -1,12 +1,16 @@
 Date;Begining;End;Description
 24/02/2022;21:10;22:25;Write Project Plan: Introduction and Problem Statement
 25/02/2022;00:00;00:30;Write Project Plan: Approach and References
-25/02/2022;10:50;13:00;Write Project Plan: Time plan and Fixing formating
+25/02/2022;10:50;13:00;Write Project Plan: Time plan and Fixing formatting
 16/03/2022;19:30;20:35;Resource Retrieval: Getting some references
 17/03/2022;19:20;19:25;Environment Setup: Installing OpenMP
-24/03/2022;11:25;13:00;Implement basic models and test: Argmuent and file parsing
+24/03/2022;11:25;13:00;Implement basic models and test: Argument and file parsing
 27/03/2022;18:50;20:15;Implement basic models and test: Implement serial kd-tree
-28/03/2022;11:50;13:15;Implement basic models and test: Undurstanding implementation and OpenMP
+28/03/2022;11:50;13:15;Implement basic models and test: Understanding implementation and OpenMP
 29/03/2022;17:15;18:45;Implement basic models and test: Debugging serial kd-tree and implementing parallel kd-tree
 30/03/2022;10:30;11:15;Implement basic models and test: Implementing parallel kd-tree
-30/03/2022:11:15;;Experiment and acquire metrics: Benchmarking serial and parallel kd-tree
+30/03/2022:11:15;13:45;Experiment and acquire metrics: Benchmarking serial and parallel kd-tree
+31/03/2022;11:00;11:45;Implement basic models and test: Optimizing building kd-tree
+31/03/2022;11:45;12:30;Experiment and acquire metrics: Redoing benchmarks
+04/04/2022;16:00;18:20;Implement basic models and test: debugging parallel kd-tree
+09/04/2022;17:20;

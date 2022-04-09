@@ -81,10 +81,10 @@ int main(int argc, char* argv[]){
     auto start = std::chrono::high_resolution_clock::now();
     node* tree;
     if(parallel){
-        tree = build_parallel(neurons, neurons.begin(), neurons.end(), 0, nullptr);
+        tree = build_parallel(neurons, 0, nullptr);
         end = std::chrono::high_resolution_clock::now();
     }else{
-        tree = build_serial(neurons, neurons.begin(), neurons.end(), 0, nullptr);
+        tree = build_serial(neurons, 0, nullptr);
         end = std::chrono::high_resolution_clock::now();
     }
 

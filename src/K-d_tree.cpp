@@ -6,41 +6,43 @@
 
 #define DIMENSION 3
 
-node* build_serial(std::vector<neuron> net, std::vector<neuron>::iterator begin, std::vector<neuron>::iterator end, int depth, node* parent){
-	if((begin-end) == 0) return nullptr;
-	
-	node* elem = new node();
-	elem-> root = parent;
-	if((end-begin) == 1){
-		elem->data = net[0];
-		return elem;
-	}
-	
-	auto m = begin + (end - begin)/2;
-	std::nth_element(begin, m, end, [depth](neuron lhs, neuron rhs){
-						switch(depth%DIMENSION){
-							case 0:
-								return lhs.x < rhs.x;
-							case 1:
-								return lhs.y < rhs.y;
-							case 2:
-								return lhs.z < rhs.z;
-						}
-						return false;
-					});
-	elem->data = *m;
-	elem->left = build_serial(net, begin, m,depth+1,elem);
-	elem->right = build_serial(net, m+1, end,depth+1,elem);
-	return elem;
+node* build_serial(std::vector<neuron> net, int depth, node* parent){
+    if(net.empty()) return nullptr;
+
+    node* elem = new node();
+    elem-> root = parent;
+    if(net.size() == 1){
+        elem->data = net[0];
+        return elem;
+    }
+
+    auto m = net.begin() + net.size()/2;
+    std::nth_element(net.begin(), m, net.end(), [depth](neuron lhs, neuron rhs){
+        switch(depth%DIMENSION){
+            case 0:
+                return lhs.x < rhs.x;
+            case 1:
+                return lhs.y < rhs.y;
+            case 2:
+                return lhs.z < rhs.z;
+        }
+        return false;
+    });
+    elem->data = net[net.size()/2];
+    std::vector<neuron> left(net.begin(),net.begin()+net.size()/2);
+    std::vector<neuron> right(net.begin()+net.size()/2+1, net.end());
+    elem->left = build_serial(left,depth+1,elem);
+    elem->right = build_serial(right,depth+1,elem);
+    return elem;
 }
 
-node* __build_parallel(std::vector<neuron> net, std::vector<neuron>::iterator begin, std::vector<neuron>::iterator end, int depth, node* parent) {
-    if((end-begin) == 0) return nullptr;
+node* __build_parallel(std::vector<neuron> net, int depth, node* parent) {
+    if(net.empty()) return nullptr;
     node* elem = new node();
     elem-> root = parent;
 
-    auto m = begin + (end - begin)/2;
-    std::nth_element(begin, m, end, [depth](neuron lhs, neuron rhs){
+    auto m = net.begin() + net.size()/2;
+    std::nth_element(net.begin(), m, net.end(), [depth](neuron lhs, neuron rhs){
         switch(depth%DIMENSION){
             case 0:
                 return lhs.x < rhs.x;
@@ -55,23 +57,24 @@ node* __build_parallel(std::vector<neuron> net, std::vector<neuron>::iterator be
     elem->data = *m;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
-    #pragma omp task default(none) shared(net,elem, depth, begin, end, m, std::cout)
+    #pragma omp task default(none) shared(net,elem, depth, std::cout)
     {
-        elem->left = __build_parallel(net, begin, m,depth+1,elem);
+        std::vector<neuron> left(net.begin(),net.begin()+net.size()/2);
+        elem->left = __build_parallel(left,depth+1,elem);
     }
-    #pragma omp task  default(none) shared(net,elem, depth, begin, end, m, std::cout)
+    #pragma omp task  default(none) shared(net,elem, depth, std::cout)
     {
-        elem->right = __build_parallel(net, m+1, end,depth+1,elem);
+        std::vector<neuron> right(net.begin()+net.size()/2+1, net.end());
+        elem->right = __build_parallel(right,depth+1,elem);
     }
-    #pragma omp taskwait
 
     return elem;
 }
 
-node* build_parallel(std::vector<neuron> net, std::vector<neuron>::iterator begin, std::vector<neuron>::iterator end, int depth, node* parent) {
-    if((end-begin) == 0) return nullptr;
+node* build_parallel(std::vector<neuron> net, int depth, node* parent) {
+    if(net.empty()) return nullptr;
 
-    if((end-begin) == 1){
+    if(net.size() == 1){
         node* elem = new node();
         elem-> root = parent;
         elem->data = net[0];
@@ -82,13 +85,13 @@ node* build_parallel(std::vector<neuron> net, std::vector<neuron>::iterator begi
     //    return build_serial(net, begin, end, depth, parent);
     //} else{
     node* res;
-    #pragma omp parallel default(none) shared(net,begin,end,depth,parent,res)
+    #pragma omp parallel default(none) shared(net,depth,parent,res)
     {
         #pragma omp single
         {
-            #pragma omp task default(none) shared(net,begin,end,depth,parent,res)
+            #pragma omp task default(none) shared(net,depth,parent,res)
             {
-                res = __build_parallel(net, begin, end, depth, parent);
+                res = __build_parallel(net, depth, parent);
                 #pragma omp taskwait
             }
         }
