@@ -29,7 +29,7 @@ void print(node* root, int depth){
         if (depth > 0)
             std::cout << "|--";
 
-        std::cout << "(" << root->data.x << "," << root->data.y << "," << root->data.z  << ") -> " << root->data.sample << ":" << root->data.type << " = " << root->data.radius << std::endl;
+        std::cout << "(" << root->data->x << "," << root->data->y << "," << root->data->z  << ") -> " << root->data->sample << ":" << root->data->type << " = " << root->data->radius << std::endl;
         print(root->left, depth+1);
         print(root->right, depth+1);
     }
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
 			break;
 		case 3:
 			filename = argv[2];
-			
+
 			if(argv[1][0] != '-'){
 				std::cout << "Unkown parameter: \"" << argv[1] << "\"" << std::endl;
 				usage(argv[0]);

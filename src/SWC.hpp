@@ -23,7 +23,7 @@ struct neuron{
  * @param filename
  * @return
  */
-std::vector<neuron> parseFile(std::string filename);
+std::vector<neuron*> parseFile(std::string filename);
 
 /**
  *

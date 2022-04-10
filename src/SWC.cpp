@@ -19,7 +19,7 @@ const std::regex regex_comment("#.*");
 const std::regex regex_trimming("(^\\s+)|(\\s+$)");
 
 
-std::vector<neuron> parseFile(std::string filename){
+std::vector<neuron*> parseFile(std::string filename){
 	std::ifstream file;
     file.open(filename);
 
@@ -28,12 +28,12 @@ std::vector<neuron> parseFile(std::string filename){
         exit(1);
     }
 
-	std::vector<neuron> output;
+	std::vector<neuron*> output;
 
 	while(!file.eof()){
 		neuron* n = getNeuron(file);
 		if(n != nullptr){
-			output.push_back(*n);
+			output.push_back(n);
 		}
 	}
 

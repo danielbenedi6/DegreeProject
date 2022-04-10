@@ -3,9 +3,9 @@ import statistics
 import itertools
 import matplotlib.pyplot as plt
 
-data = pandas.read_csv('benchmark_5.csv')
+data = pandas.read_csv('benchmark_6.csv')
 
-columns = [ str(i) for i in range(1,21)]
+columns = [ str(i) for i in range(1,1001)]
 data["times"] = data[columns].values.tolist()
 data.drop(labels=columns, axis=1, inplace=True)
 
@@ -22,5 +22,5 @@ for exec in data["type"].unique():
 plt.legend(data["type"].unique())
 plt.yscale('log')
 plt.ylabel('Time (µs)')
-plt.xlabel('Nuerons')
+plt.xlabel('Neurons')
 plt.show()

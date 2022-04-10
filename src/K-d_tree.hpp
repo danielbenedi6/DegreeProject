@@ -3,7 +3,7 @@
 #include <vector>
 
 struct node{
-	neuron data;
+	neuron *data;
 	node *root, *left, *right;
 };
 
@@ -15,7 +15,7 @@ struct node{
  * @param parent
  * @return
  */
-node* build_serial(std::vector<neuron> net, int depth, node* parent);
+node* build_serial(std::vector<neuron*> net, int depth, node* parent);
 
 /**
  *
@@ -24,6 +24,6 @@ node* build_serial(std::vector<neuron> net, int depth, node* parent);
  * @param parent
  * @return
  */
-node* build_parallel(std::vector<neuron> net, int depth, node* parent);
+node* build_parallel(std::vector<neuron*> net, int depth, node* parent);
 
 void free(node* root);

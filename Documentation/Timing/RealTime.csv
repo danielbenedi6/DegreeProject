@@ -13,4 +13,5 @@ Date;Begining;End;Description
 31/03/2022;11:00;11:45;Implement basic models and test: Optimizing building kd-tree
 31/03/2022;11:45;12:30;Experiment and acquire metrics: Redoing benchmarks
 04/04/2022;16:00;18:20;Implement basic models and test: debugging parallel kd-tree
-09/04/2022;17:20;
+09/04/2022;17:20;19:00;Implement basic models and test: debugging
+10/04/2022;16:00;17:55;Implement basic models and test: Optimizing and Redoing benchmarks

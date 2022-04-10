@@ -6,7 +6,7 @@
 
 #define DIMENSION 3
 
-node* build_serial(std::vector<neuron> net, int depth, node* parent){
+node* build_serial(std::vector<neuron*> net, int depth, node* parent){
     if(net.empty()) return nullptr;
 
     node* elem = new node();
@@ -17,39 +17,39 @@ node* build_serial(std::vector<neuron> net, int depth, node* parent){
     }
 
     auto m = net.begin() + net.size()/2;
-    std::nth_element(net.begin(), m, net.end(), [depth](neuron lhs, neuron rhs){
+    std::nth_element(net.begin(), m, net.end(), [depth](neuron* lhs, neuron* rhs){
         switch(depth%DIMENSION){
             case 0:
-                return lhs.x < rhs.x;
+                return lhs->x < rhs->x;
             case 1:
-                return lhs.y < rhs.y;
+                return lhs->y < rhs->y;
             case 2:
-                return lhs.z < rhs.z;
+                return lhs->z < rhs->z;
         }
         return false;
     });
     elem->data = net[net.size()/2];
-    std::vector<neuron> left(net.begin(),net.begin()+net.size()/2);
-    std::vector<neuron> right(net.begin()+net.size()/2+1, net.end());
+    std::vector<neuron*> left(net.begin(),net.begin()+net.size()/2);
+    std::vector<neuron*> right(net.begin()+net.size()/2+1, net.end());
     elem->left = build_serial(left,depth+1,elem);
     elem->right = build_serial(right,depth+1,elem);
     return elem;
 }
 
-node* __build_parallel(std::vector<neuron> net, int depth, node* parent) {
+node* __build_parallel(std::vector<neuron*> net, int depth, node* parent) {
     if(net.empty()) return nullptr;
     node* elem = new node();
     elem-> root = parent;
 
     auto m = net.begin() + net.size()/2;
-    std::nth_element(net.begin(), m, net.end(), [depth](neuron lhs, neuron rhs){
+    std::nth_element(net.begin(), m, net.end(), [depth](neuron* lhs, neuron* rhs){
         switch(depth%DIMENSION){
             case 0:
-                return lhs.x < rhs.x;
+                return lhs->x < rhs->x;
             case 1:
-                return lhs.y < rhs.y;
+                return lhs->y < rhs->y;
             case 2:
-                return lhs.z < rhs.z;
+                return lhs->z < rhs->z;
         }
         return false;
     });
@@ -57,21 +57,21 @@ node* __build_parallel(std::vector<neuron> net, int depth, node* parent) {
     elem->data = *m;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
-    #pragma omp task default(none) shared(net,elem, depth, std::cout)
+    std::vector<neuron*> left(net.begin(),net.begin()+net.size()/2);
+    std::vector<neuron*> right(net.begin()+net.size()/2+1, net.end());
+    #pragma omp task default(none) shared(net,elem, depth, std::cout) private(left)
     {
-        std::vector<neuron> left(net.begin(),net.begin()+net.size()/2);
         elem->left = __build_parallel(left,depth+1,elem);
     }
-    #pragma omp task  default(none) shared(net,elem, depth, std::cout)
+    #pragma omp task  default(none) shared(net,elem, depth, std::cout) private(right)
     {
-        std::vector<neuron> right(net.begin()+net.size()/2+1, net.end());
         elem->right = __build_parallel(right,depth+1,elem);
     }
 
     return elem;
 }
 
-node* build_parallel(std::vector<neuron> net, int depth, node* parent) {
+node* build_parallel(std::vector<neuron*> net, int depth, node* parent) {
     if(net.empty()) return nullptr;
 
     if(net.size() == 1){
