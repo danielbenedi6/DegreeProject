@@ -24,6 +24,6 @@ node* build_serial(std::vector<neuron*> net, int depth, node* parent);
  * @param parent
  * @return
  */
-node* build_parallel(std::vector<neuron*> net, int depth, node* parent);
+node* build_parallel(std::vector<neuron*> net, int depth, node* parent, bool (*heuristic)(neuron* lhs, neuron* rhs, int depth, node* parent));
 
 void free(node* root);

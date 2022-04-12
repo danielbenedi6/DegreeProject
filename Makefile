@@ -19,7 +19,7 @@ SRC_DIR = src
 BUILD_DIR = build
 TARGET = bin
 
-SOURCES = ${EXEC}.o SWC.o K-d_tree.o
+SOURCES = ${EXEC}.o SWC.o K-d_tree.o heuristic.o
 OBJECTS = $(patsubst %.o,$(BUILD_DIR)/%.o,$(SOURCES))
 
 DOCS_CONFIG = doxygen-docs

@@ -11,6 +11,8 @@
 #include <omp.h>
 #include "SWC.hpp"
 #include "K-d_tree.hpp"
+#include "heuristic.hpp"
+
 void usage(char name[]){
 	std::cout << "Usage:" << name << " [param] filename" << std::endl;
 	std::cout << "Param: (Default -c)" << std::endl;
@@ -38,7 +40,7 @@ void print(node* root, int depth){
 int main(int argc, char* argv[]){
 	std::string filename;
 	bool parallel = false;
-	int heuristic = 0;
+	int heuristic_id = 0;
 
 	switch(argc){
 		case 2:
@@ -54,8 +56,8 @@ int main(int argc, char* argv[]){
 			}
 			if(argv[1][1] == 'p'){
 				parallel = true;
-				heuristic = argv[1][2] - '0';
-				if(heuristic < 0 || heuristic > 3){
+                heuristic_id = argv[1][2] - '0';
+				if(heuristic_id < 0 || heuristic_id > 3){
 					std::cout << "Unkown parameter: \"" << argv[1] << "\"" << std::endl;
 					usage(argv[0]);
 					return 128;
@@ -81,7 +83,7 @@ int main(int argc, char* argv[]){
     auto start = std::chrono::high_resolution_clock::now();
     node* tree;
     if(parallel){
-        tree = build_parallel(neurons, 0, nullptr);
+        tree = build_parallel(neurons, 0, nullptr, heuristics[heuristic_id]);
         end = std::chrono::high_resolution_clock::now();
     }else{
         tree = build_serial(neurons, 0, nullptr);
