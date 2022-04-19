@@ -3,7 +3,7 @@
 
 const heuristic_func heuristics[] = {default_compare,surface_area,curve_complexity};
 
-bool default_compare(neuron* lhs, neuron* rhs, int depth, node* parent){
+bool default_compare(compartment* lhs, compartment* rhs, int depth, node* parent){
     switch(depth%DIMENSION){
         case 0:
             return lhs->x < rhs->x;
@@ -15,10 +15,10 @@ bool default_compare(neuron* lhs, neuron* rhs, int depth, node* parent){
     return false;
 }
 
-bool surface_area(neuron* lhs, neuron* rhs, int depth, node* parent){
+bool surface_area(compartment* lhs, compartment* rhs, int depth, node* parent){
     return true;
 }
 
-bool curve_complexity(neuron* lhs, neuron* rhs, int depth, node* parent){
+bool curve_complexity(compartment* lhs, compartment* rhs, int depth, node* parent){
     return true;
 }

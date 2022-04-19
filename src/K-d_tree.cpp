@@ -5,7 +5,7 @@
 #include <string>
 
 
-node* build_serial(std::vector<neuron*> net, int depth, node* parent){
+node* build_serial(std::vector<compartment*> net, int depth, node* parent){
     if(net.empty()) return nullptr;
 
     node* elem = new node();
@@ -16,7 +16,7 @@ node* build_serial(std::vector<neuron*> net, int depth, node* parent){
     }
 
     auto m = net.begin() + net.size()/2;
-    std::nth_element(net.begin(), m, net.end(), [depth](neuron* lhs, neuron* rhs){
+    std::nth_element(net.begin(), m, net.end(), [depth](compartment* lhs, compartment* rhs){
         switch(depth%3){
             case 0:
                 return lhs->x < rhs->x;
@@ -28,28 +28,28 @@ node* build_serial(std::vector<neuron*> net, int depth, node* parent){
         return false;
     });
     elem->data = net[net.size()/2];
-    std::vector<neuron*> left(net.begin(),net.begin()+net.size()/2);
-    std::vector<neuron*> right(net.begin()+net.size()/2+1, net.end());
+    std::vector<compartment*> left(net.begin(), net.begin() + net.size() / 2);
+    std::vector<compartment*> right(net.begin() + net.size() / 2 + 1, net.end());
     elem->left = build_serial(left,depth+1,elem);
     elem->right = build_serial(right,depth+1,elem);
     return elem;
 }
 
-node* __build_parallel(std::vector<neuron*> net, int depth, node* parent, bool (*heuristic)(neuron* lhs, neuron* rhs, int depth, node* parent)){
+node* __build_parallel(std::vector<compartment*> net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)){
     if(net.empty()) return nullptr;
     node* elem = new node();
     elem-> root = parent;
 
     auto m = net.begin() + net.size()/2;
-    std::nth_element(net.begin(), m, net.end(), [depth, elem, heuristic](neuron* lhs, neuron* rhs){
+    std::nth_element(net.begin(), m, net.end(), [depth, elem, heuristic](compartment* lhs, compartment* rhs){
         return heuristic(lhs, rhs, depth, elem);
     });
 
     elem->data = *m;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
-    std::vector<neuron*> left(net.begin(),net.begin()+net.size()/2);
-    std::vector<neuron*> right(net.begin()+net.size()/2+1, net.end());
+    std::vector<compartment*> left(net.begin(), net.begin() + net.size() / 2);
+    std::vector<compartment*> right(net.begin() + net.size() / 2 + 1, net.end());
     #pragma omp task default(none) shared(net,elem, depth, std::cout, heuristic) private(left)
     {
         elem->left = __build_parallel(left,depth+1,elem, heuristic);
@@ -62,7 +62,7 @@ node* __build_parallel(std::vector<neuron*> net, int depth, node* parent, bool (
     return elem;
 }
 
-node* build_parallel(std::vector<neuron*> net, int depth, node* parent, bool (*heuristic)(neuron* lhs, neuron* rhs, int depth, node* parent)) {
+node* build_parallel(std::vector<compartment*> net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)) {
     if(net.empty()) return nullptr;
 
     if(net.size() == 1){
