@@ -1,7 +1,7 @@
 #include "heuristic.hpp"
 #define DIMENSION 3
 
-const heuristic_func heuristics[] = {default_compare,surface_area,curve_complexity};
+const heuristic_func heuristic_funcs[] = {default_compare,surface_area,curve_complexity};
 
 bool default_compare(compartment* lhs, compartment* rhs, int depth, node* parent){
     switch(depth%DIMENSION){

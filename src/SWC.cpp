@@ -89,7 +89,7 @@ std::vector<neuron> parseRPL(const std::string& filename, const neuron& n){
 
         // Read the operations
         while(buff){
-            std::int8_t op, ax;
+            int op, ax;
             double val;
 
             buff >> op;
@@ -110,20 +110,22 @@ std::vector<neuron> parseRPL(const std::string& filename, const neuron& n){
             }else if(op == 1){ // Rotation
                 double cosVal = cos(val), sinVal = sin(val);
                 for(compartment* c : res){
+                    double x = c->x, y = c->y, z = c->z;
                     if(ax == 0) { // Rotation axis is x
-                        c->y = c->y * cosVal - c->z * sinVal;
-                        c->z = c->y * sinVal + c->z * cosVal;
+                        c->y = y * cosVal - z * sinVal;
+                        c->z = y * sinVal + z * cosVal;
                     } else if( ax == 1){ // Rotation axis is y
-                        c->x = c->x * cosVal - c->z * sinVal;
-                        c->z = c->x * sinVal + c->z * cosVal;
+                        c->x = x * cosVal - z * sinVal;
+                        c->z = x * sinVal + z * cosVal;
                     } else if( ax == 2){ // Rotation axis is z
-                        c->x = c->x * cosVal - c->y * sinVal;
-                        c->y = c->x * sinVal + c->y * cosVal;
+                        c->x = x * cosVal - y * sinVal;
+                        c->y = x * sinVal + y * cosVal;
                     }
                 }
             }
         }
 
+        output.push_back(res);
 
         getline(file, line);
     }

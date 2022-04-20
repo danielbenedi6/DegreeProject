@@ -5,7 +5,7 @@
 #include <string>
 
 
-node* build_serial(std::vector<compartment*> net, int depth, node* parent){
+node* build_serial(neuron net, int depth, node* parent){
     if(net.empty()) return nullptr;
 
     node* elem = new node();
@@ -35,7 +35,7 @@ node* build_serial(std::vector<compartment*> net, int depth, node* parent){
     return elem;
 }
 
-node* __build_parallel(std::vector<compartment*> net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)){
+node* __build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)){
     if(net.empty()) return nullptr;
     node* elem = new node();
     elem-> root = parent;
@@ -48,8 +48,8 @@ node* __build_parallel(std::vector<compartment*> net, int depth, node* parent, b
     elem->data = *m;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
-    std::vector<compartment*> left(net.begin(), net.begin() + net.size() / 2);
-    std::vector<compartment*> right(net.begin() + net.size() / 2 + 1, net.end());
+    neuron left(net.begin(), net.begin() + net.size() / 2);
+    neuron right(net.begin() + net.size() / 2 + 1, net.end());
     #pragma omp task default(none) shared(net,elem, depth, std::cout, heuristic) private(left)
     {
         elem->left = __build_parallel(left,depth+1,elem, heuristic);
@@ -62,7 +62,7 @@ node* __build_parallel(std::vector<compartment*> net, int depth, node* parent, b
     return elem;
 }
 
-node* build_parallel(std::vector<compartment*> net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)) {
+node* build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)) {
     if(net.empty()) return nullptr;
 
     if(net.size() == 1){
@@ -96,4 +96,27 @@ void free(node* root){
     free(root->left);
     free(root->right);
     delete root;
+}
+
+inline double dist2(const compartment* lhs,const compartment* rhs){
+    return (lhs->x - rhs->x)*(lhs->x - rhs->x) + (lhs->y - rhs->y)*(lhs->y - rhs->y) + (lhs->z - rhs->z)*(lhs->z - rhs->z);
+}
+
+compartment* find_nearest(node* root, const compartment* target, double dist){
+    node* cur = root;
+    int depth = 0;
+    dist *= dist;
+
+    while(cur != nullptr){
+        if(dist2(cur->data, target) < dist){
+            return cur->data;
+        }else {
+            if(depth == 0) cur = target->x < cur->data->x ? cur->left : cur->right ;
+            else if(depth == 1) cur = target->y < cur->data->y ? cur->left : cur->right ;
+            else if(depth == 2) cur = target->z < cur->data->z ? cur->left : cur->right ;
+            depth = (depth+1)%3;
+        }
+    }
+
+    return nullptr;
 }
