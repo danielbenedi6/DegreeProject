@@ -46,6 +46,19 @@ void print(node* root, int depth){
     }
 }
 
+int test(node* serial, node* parallel){
+    if(serial == nullptr && parallel == nullptr)
+        return 0;
+    if(serial == nullptr || parallel == nullptr)
+        return serial == nullptr? 1 : 2;
+    if(serial->data->x != parallel->data->x || serial->data->y != parallel->data->y || serial->data->z != parallel->data->z || serial->data->radius != parallel->data->radius || serial->data->sample != parallel->data->sample || serial->data->type != parallel->data->type)
+        return 3;
+    int lhs = test(serial->left, parallel->left);
+    if(lhs == 0)
+        return test(serial->right, parallel->right);
+    else return lhs;
+}
+
 int main(int argc, char* argv[]){
 	std::string swc_file, rpl_file;
 	bool parallel = false;
@@ -95,23 +108,25 @@ int main(int argc, char* argv[]){
     auto network = parseRPL(rpl_file, neuron_description);
     //std::cout << " Done!" << std::endl;
 
+    /*
     std::cout << neuron_description.size() << " compartments" << std::endl;
     std::cout << network.size() << " neurons" << std::endl;
+    */
 
     auto end_build = std::chrono::high_resolution_clock::now();
     auto start_build = std::chrono::high_resolution_clock::now();
     auto end_query = std::chrono::high_resolution_clock::now();
     auto start_query = std::chrono::high_resolution_clock::now();
-    std::vector<node*> nodes;
+    std::vector<node*> nodes(network.size(), nullptr);
     compartment* query = network[n][c];
     std::vector<compartment*> result;
     if(parallel){
         //=========================================================
         //===================== BUILD =============================
         //=========================================================
-        for(neuron & i : network){
-            node* tree = build_parallel(i, 0, nullptr, heuristic_funcs[heuristic_id]);
-            nodes.push_back(tree);
+        #pragma omp parallel for default(none) shared(nodes, network, neuron_description, heuristic_id, heuristic_funcs, std::cout)
+        for(int i = 0; i < network.size(); i++){
+            nodes[i] = build_parallel(network[i], 0, nullptr, heuristic_funcs[heuristic_id]);
         }
         end_build = std::chrono::high_resolution_clock::now();
 
@@ -120,11 +135,13 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        #pragma omp parallel for default(none) shared(nodes, query, result)
-        for(node* & elem : nodes){
+        #pragma omp parallel for default(none) shared(nodes, query, result, n)
+        for(int i = 0; i < nodes.size(); i++){
+            if(i == n) continue;
+            node* elem = nodes[i];
             compartment* res = find_nearest(elem, query, 3.0);
             if(res != nullptr){
-                #pragma omp critical
+                #pragma omp critical (result)
                 result.push_back(res);
             }
         }
@@ -144,15 +161,17 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        for(node* & elem : nodes){
+
+        for(int i = 0; i < nodes.size(); i++){
+            if(i == n) continue;
+            node* elem = nodes[i];
             compartment* res = find_nearest(elem, query, 3.0);
-            if(res != nullptr)
+            if(res != nullptr && query != res)
                 result.push_back(res);
         }
         end_query = std::chrono::high_resolution_clock::now();
     }
 
-    std::cout << result.size() << " hits" << std::endl;
 
     //print(tree, 0);
     for(node* tree : nodes)
@@ -160,8 +179,7 @@ int main(int argc, char* argv[]){
 
     auto duration_build = std::chrono::duration_cast<std::chrono::microseconds>(end_build - start_build).count();
     auto duration_query = std::chrono::duration_cast<std::chrono::microseconds>(end_query - start_query).count();
-    std::cout << duration_build << " us" << std::endl;
-    std::cout << duration_query << " us" << std::endl;
+    std::cout << result.size() << "," << duration_build << "," << duration_query << std::endl;
 
     return 0;
 }

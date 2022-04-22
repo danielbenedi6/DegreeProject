@@ -2,20 +2,17 @@
 COUNT=$2
 OUTPUT=$1
 
-echo "type,filename,number_neurons,$( seq "$((COUNT-1))" | tr '\n' ',')$COUNT" > "$OUTPUT"
-
-for file in ./tests/*.swc; do
-  echo -n "s,${file},$( grep -c '^[[:blank:]]*[^[:blank:]#]' "${file}" )" >> "$OUTPUT"
-  for i in $( seq "$COUNT" ) ; do
-    echo -n ",$( ./bin/main -s "${file}" | sed 's/ us//' )" >> "$OUTPUT"
+echo "type,neurons,density,hits,building_time,search_time" > "${OUTPUT}.csv"
+for file in ./tests/"${OUTPUT}"/*.rpl; do
+  NEURONS=$(echo "$file" | cut -d'_' -f2)
+  n=$(( $( od -vAn -N4 -tu4 < /dev/urandom ) % NEURONS ))
+  c=$(( $( od -vAn -N4 -tu4 < /dev/urandom ) % 645 + 1 ))
+  for i in $( seq "${COUNT}" ); do
+    {
+      echo -n "s,$( basename "${file}" | sed 's/^\(.*\)_\(.*\).rpl/\1,\2/' ),";
+      ./bin/main -s tests/interneuron.CNG.swc "$file" $n $c;
+      echo -n "p0,$( basename "${file}" | sed 's/^\(.*\)_\(.*\).rpl/\1,\2/' ),";
+      ./bin/main -p0 tests/interneuron.CNG.swc "$file" $n $c;
+    } >> "${OUTPUT}.csv"
   done
-  echo "" >> "$OUTPUT"
-done
-
-for file in ./tests/*.swc; do
-  echo -n "p0,${file},$( grep -c '^[[:blank:]]*[^[:blank:]#]' "${file}" )" >> "$OUTPUT"
-  for i in $( seq "$COUNT" ) ; do
-    echo -n ",$( ./bin/main -p0 "${file}" | sed 's/ us//' )" >> "$OUTPUT"
-  done
-  echo "" >> "$OUTPUT"
 done

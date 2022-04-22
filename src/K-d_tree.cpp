@@ -3,9 +3,10 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 
-node* build_serial(neuron net, int depth, node* parent){
+node* build_serial(neuron &net, int depth, node* parent){
     if(net.empty()) return nullptr;
 
     node* elem = new node();
@@ -28,8 +29,8 @@ node* build_serial(neuron net, int depth, node* parent){
         return false;
     });
     elem->data = net[net.size()/2];
-    std::vector<compartment*> left(net.begin(), net.begin() + net.size() / 2);
-    std::vector<compartment*> right(net.begin() + net.size() / 2 + 1, net.end());
+    neuron left(net.begin(), m);
+    neuron right(m + 1, net.end());
     elem->left = build_serial(left,depth+1,elem);
     elem->right = build_serial(right,depth+1,elem);
     return elem;
@@ -48,16 +49,17 @@ node* __build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(co
     elem->data = *m;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
-    neuron left(net.begin(), net.begin() + net.size() / 2);
-    neuron right(net.begin() + net.size() / 2 + 1, net.end());
-    #pragma omp task default(none) shared(net,elem, depth, std::cout, heuristic) private(left)
+    #pragma omp task default(none) shared(net,elem, depth, std::cout, heuristic)
     {
+        neuron left(net.begin(), net.begin() + net.size() / 2);
         elem->left = __build_parallel(left,depth+1,elem, heuristic);
     }
-    #pragma omp task  default(none) shared(net,elem, depth, std::cout, heuristic) private(right)
+    #pragma omp task  default(none) shared(net,elem, depth, std::cout, heuristic)
     {
+        neuron right(net.begin() + net.size() / 2 + 1, net.end());
         elem->right = __build_parallel(right,depth+1,elem, heuristic);
     }
+    #pragma omp taskwait
 
     return elem;
 }
@@ -77,15 +79,9 @@ node* build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(comp
     //} else{
     node* res;
     #pragma omp parallel default(none) shared(net,depth,parent,res, heuristic)
+    #pragma omp single
     {
-        #pragma omp single
-        {
-            #pragma omp task default(none) shared(net,depth,parent,res, heuristic)
-            {
-                res = __build_parallel(net, depth, parent, heuristic);
-                #pragma omp taskwait
-            }
-        }
+        res = __build_parallel(net, depth, parent, heuristic);
     }
     return res;
 }

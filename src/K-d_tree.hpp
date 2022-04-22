@@ -15,7 +15,7 @@ struct node{
  * @param parent
  * @return
  */
-node* build_serial(neuron net, int depth, node* parent);
+node* build_serial(neuron& net, int depth, node* parent);
 
 /** Builds a kd-tree from a vector of compartments using the given heuristic.
  *

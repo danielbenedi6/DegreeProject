@@ -33,13 +33,15 @@ for i in tqdm(range(1, n+1), ncols=80):
         density = min_density*(1-j/m) + max_density*(j/m)
 
         d = (1./density)**(1./3.)*1000
-        l = int(neurons**(1./3.))
+        n1 = round(neurons**(1./3.))
+        n2 = round((neurons/n1)**(1./2.))
+        n3 = round((neurons/(n1*n2)))
 
-        out = open('tests/'+op+'/' + str(neurons).zfill(len(str(max_neurons))) + '_' + str(density) + '.rpl', 'w')
+        out = open('tests/'+op+'/' + str(n1*n2*n3).zfill(len(str(max_neurons))) + '_' + str(density) + '.rpl', 'w')
 
-        for a in range(l):
-            for b in range(l):
-                for c in range(l):
+        for a in range(n1):
+            for b in range(n2):
+                for c in range(n3):
                     rot = random.choice(rotations)
                     random.shuffle(rot)
                     for r in rot:
