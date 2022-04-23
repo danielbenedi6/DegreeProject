@@ -3,27 +3,23 @@ import statistics
 import itertools
 import matplotlib.pyplot as plt
 
-data = pandas.read_csv('benchmark.csv')
 
-columns = [ str(i) for i in range(1,1001)]
-data["times"] = data[columns].values.tolist()
-data.drop(labels=columns, axis=1, inplace=True)
-
-data.plot(kind='hist')
-plt.figure()
+data = pandas.read_csv('neurons.csv')
+fig, (ax_b, ax_q) = plt.subplots(1,2)
+fig.suptitle('Timing for different neurons with density 16991 neurons/mm³')
 for exec in data["type"].unique():
-    neurons = data[data["type"] == exec]["number_neurons"].unique()
-    neurons.sort()
-    means = []
-    stdevs = []
-    for number in neurons:
-        times = list(itertools.chain.from_iterable(data[(data["type"] == exec) & (data["number_neurons"] == number)]["times"].values))
-        means.append(statistics.mean(times))
-        stdevs.append(statistics.stdev(times))
-    plt.plot(neurons,means)
-plt.legend(data["type"].unique())
-plt.yscale('log')
-plt.ylabel('Time (µs)')
-plt.xlabel('Neurons')
-plt.title('Average Building Time (N=1000)')
+    neurons = data[data["type"] == exec]["neurons"].unique()
+    mean_building = []
+    mean_search = []
+    for neuron in neurons:
+        t_building = data[ (data["type"] == exec) & (data["neurons"] == neuron)]["building_time"].values
+        t_search = data[ (data["type"] == exec) & (data["neurons"] == neuron)]["search_time"].values
+        mean_building.append(statistics.mean(t_building))
+        mean_search.append(statistics.mean(t_search))
+    ax_b.plot(neurons,mean_building, label=exec)
+    ax_q.plot(neurons,mean_search, label=exec)
+ax_b.set(title='Building time', xlabel='Neurons', ylabel='Time (µs)', yscale='log')
+ax_q.set(title='Search time', xlabel='Neurons', ylabel='Time (µs)', yscale='log')
+ax_b.legend()
+ax_q.legend()
 plt.show()
