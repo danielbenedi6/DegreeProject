@@ -14,6 +14,7 @@ int default_compare(neuron net, int depth){
 // DOI: 10.1109/RT.2006.280216
 // On building fast kd-Trees for Ray Tracing, and on doing that in O(N log N)
 int surface_area(neuron net, int depth){
+    if(net.size() <= 2) return 0;
     double C[DIMENSION];
     for(int  i = 0; i < DIMENSION; i++){
         C[i] = 0.0;
@@ -64,6 +65,7 @@ int surface_area(neuron net, int depth){
 // DOI: 10.1111/cgf.142647
 // Curve Complexity Heuristic KD-trees for Neighborhood-based Exploration of 3D Curves
 int curve_complexity(neuron net, int depth){
+    if(net.size() <= 2) return 0;
     double C[DIMENSION];
     for(int i = 0; i < DIMENSION; i++){
         C[i] = 0.0; // C(T) = C_transversal(T) + C_backtrack(T) + nT_dist
