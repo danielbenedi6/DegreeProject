@@ -26,3 +26,4 @@ Date;Begining;End;Description
 23/04/2022;10:00;11:05;Experiment and acquire metrics: Analyzing results from yesterday night experiments
 26/04/2022;10:00;13:00;Extend basic models with heuristics: Implementing variance heuristic
 27/04/2022;11:00;13:00;Extend basic models with heuristics: Implementing curve complexity heuristic
+27/04/2022;17:30;19:00;Extend basic models with heuristics: Implementing surface area heuristic

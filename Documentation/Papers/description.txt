@@ -1,3 +1,4 @@
 Bentley (doi:10.1145/361002.361007). First apparition of Kd-Tree.
 LinjiaSaeidMajid (doi:10.1109/ISCAS.2015.7169256). Parallel Kd-Tree
 Yucheng (doi:10.1111/cgf.142647). Explanation of Curve Cplexity Heuristic
+WaldHavran06 (doi:10.1109/RT.2006.280216). Explanation of Surface Area Heuristic

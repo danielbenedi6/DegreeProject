@@ -85,7 +85,8 @@ int main(int argc, char* argv[]){
 			if(argv[1][1] == 'p'){
 				parallel = true;
                 heuristic_id = argv[1][2] - '0';
-				if(heuristic_id < 0 || heuristic_id > 3){
+
+				if(heuristic_id < 0 || heuristic_id > 4){
 					std::cout << "Unkown parameter: \"" << argv[1] << "\"" << std::endl;
 					usage(argv[0]);
 					return 128;
