@@ -1,10 +1,10 @@
 #pragma once
 #include "K-d_tree.hpp"
 
-typedef bool (*heuristic_func)(compartment* lhs, compartment* rhs, int depth, node* parent);
+typedef int (*heuristic_func)(neuron net, int depth);
 
-bool default_compare(compartment* lhs, compartment* rhs, int depth, node* parent);
-bool surface_area(compartment* lhs, compartment* rhs, int depth, node* parent);
-bool curve_complexity(compartment* lhs, compartment* rhs, int depth, node* parent);
+int default_compare(neuron net, int depth);
+int surface_area(neuron net, int depth);
+int curve_complexity(neuron net, int depth);
 
 extern const heuristic_func heuristic_funcs[];

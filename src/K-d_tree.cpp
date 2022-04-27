@@ -1,4 +1,5 @@
 #include "K-d_tree.hpp"
+#include "heuristic.hpp"
 #include <omp.h>
 #include <algorithm>
 #include <iostream>
@@ -36,17 +37,19 @@ node* build_serial(neuron &net, int depth, node* parent){
     return elem;
 }
 
-node* __build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)){
+node* __build_parallel(neuron net, int depth, node* parent, int (*heuristic)(neuron net, int depth)){
     if(net.empty()) return nullptr;
     node* elem = new node();
     elem-> root = parent;
 
     auto m = net.begin() + net.size()/2;
-    std::nth_element(net.begin(), m, net.end(), [depth, elem, heuristic](compartment* lhs, compartment* rhs){
-        return heuristic(lhs, rhs, depth, elem);
+    int dimension = heuristic(net, depth);
+    std::nth_element(net.begin(), m, net.end(), [dimension](compartment* lhs, compartment* rhs){
+        return lhs->get(dimension) < rhs->get(dimension);
     });
 
     elem->data = *m;
+    elem->index = dimension;
 
     //std::cout << "Thread " + std::to_string(omp_get_thread_num()) + ": " + std::to_string(elem->data.sample) + "\n" ;
     #pragma omp task default(none) shared(net,elem, depth, std::cout, heuristic)
@@ -64,7 +67,7 @@ node* __build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(co
     return elem;
 }
 
-node* build_parallel(neuron net, int depth, node* parent, bool (*heuristic)(compartment* lhs, compartment* rhs, int depth, node* parent)) {
+node* build_parallel(neuron net, int depth, node* parent, int (*heuristic)(neuron net, int depth)) {
     if(net.empty()) return nullptr;
 
     if(net.size() == 1){
@@ -98,21 +101,19 @@ inline double dist2(const compartment* lhs,const compartment* rhs){
     return (lhs->x - rhs->x)*(lhs->x - rhs->x) + (lhs->y - rhs->y)*(lhs->y - rhs->y) + (lhs->z - rhs->z)*(lhs->z - rhs->z);
 }
 
-compartment* find_nearest(node* root, const compartment* target, double dist){
-    node* cur = root;
-    int depth = 0;
-    dist *= dist;
+compartment* find_nearest(node* root, const compartment* target, double dist, double best_dist){
+    if(root == nullptr) return nullptr;
 
-    while(cur != nullptr){
-        if(dist2(cur->data, target) < dist){
-            return cur->data;
-        }else {
-            if(depth == 0) cur = target->x < cur->data->x ? cur->left : cur->right ;
-            else if(depth == 1) cur = target->y < cur->data->y ? cur->left : cur->right ;
-            else if(depth == 2) cur = target->z < cur->data->z ? cur->left : cur->right ;
-            depth = (depth+1)%3;
-        }
+    double d = dist2(root->data, target);
+
+    if( d < best_dist){
+        best_dist = d;
+        return root->data;
     }
-
-    return nullptr;
+    if(d < dist*dist) return root->data;
+    double dx = root->data->get(root->index) - target->get(root->index);
+    compartment* result = find_nearest(dx > 0 ? root->left : root->right, target, dist, best_dist);
+    if(result != nullptr) return result;
+    if(dx*dx > best_dist) return nullptr;
+    return find_nearest(dx > 0 ? root->right : root->left, target, dist, best_dist);
 }

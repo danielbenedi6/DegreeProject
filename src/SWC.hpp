@@ -16,6 +16,8 @@ struct compartment{
 	double   z;
 	double   radius;
     std::int8_t  type;
+
+    double get(const int dimension) const;
 };
 
 using neuron = std::vector<compartment*>;

@@ -132,3 +132,16 @@ std::vector<neuron> parseRPL(const std::string& filename, const neuron& n){
 
     return output;
 }
+
+double compartment::get(const int dimension) const{
+    switch(dimension){
+        case 0:
+            return x;
+        case 1:
+            return y;
+        case 2:
+            return z;
+        default:
+            return NAN;
+    }
+}
