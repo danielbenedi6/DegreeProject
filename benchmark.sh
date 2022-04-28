@@ -7,7 +7,7 @@ echo "type,neurons,density,hits,building_time,search_time" > "${OUTPUT}.csv"
 for file in ./tests/"${OUTPUT}"/*.rpl; do
   NEURONS=$(basename "${file}" | sed 's/0*\(.*\)_.*rpl/\1/' )
   n=$(( $( od -vAn -N4 -tu4 < /dev/urandom ) % NEURONS ))
-  c=$(( $( od -vAn -N4 -tu4 < /dev/urandom ) % 645 + 1 ))
+  c=$(( $( od -vAn -N4 -tu4 < /dev/urandom ) % 645 ))
   for i in $( seq "${COUNT}" ); do
 	for method in ${methods[@]}; do
 		{
