@@ -10,6 +10,7 @@ struct node{
     int index;
 };
 
+
 /** Builds a K-d tree from a vector of compartments.
  *
  *
@@ -27,7 +28,7 @@ node* build_serial(neuron& net, int depth, node* parent);
  * @param parent The parent node of the tree
  * @return
  */
-node* build_parallel(neuron net, int depth, node* parent, int (*heuristic)(neuron net, int depth));
+node* build_parallel(neuron& net, int depth, node* parent, heuristic_func heuristic);
 
 /** Frees the memory used by the tree
  *
@@ -35,4 +36,4 @@ node* build_parallel(neuron net, int depth, node* parent, int (*heuristic)(neuro
  */
 void free(node* root);
 
-compartment* find_nearest(node* root, const compartment* target, double dist, double best_dist = std::numeric_limits<double>::infinity());
+compartment* find_nearest(node* root, const compartment* target, double dist, double& best_dist);

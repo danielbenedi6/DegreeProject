@@ -20,7 +20,8 @@ void usage(char name[]){
 	std::cout << "    -p0         Parallel Kd-tree without heuristics." << std::endl;
 	std::cout << "    -p1         Parallel Kd-tree with Surface Area heuristic." << std::endl;
 	std::cout << "    -p2         Parallel Kd-tree with Curve Complexity heuristic." << std::endl;
-	std::cout << "    -p3         Parallel Kd-tree with ToBeDefined heuristic." << std::endl;
+    std::cout << "    -p3         Parallel Kd-tree with variance as heuristic." << std::endl;
+    std::cout << "    -p4         Parallel Kd-tree with minimum variance ratio heuristic." << std::endl;
     std::cout << "swc_file    File with the neuron description with SWC format." << std::endl;
     std::cout << "rpl_file    File with the neuronal network replication. Each line " << std::endl;
     std::cout << "            represents one neuron and it has multiple triplets. If" << std::endl;
@@ -46,13 +47,23 @@ void print(node* root, int depth){
     }
 }
 
+int count_nodes(node* root){
+    if(root == nullptr)
+        return 0;
+    else
+        return 1 + count_nodes(root->left) + count_nodes(root->right);
+}
+
 int test(node* serial, node* parallel){
     if(serial == nullptr && parallel == nullptr)
         return 0;
     if(serial == nullptr || parallel == nullptr)
         return serial == nullptr? 1 : 2;
-    if(serial->data->x != parallel->data->x || serial->data->y != parallel->data->y || serial->data->z != parallel->data->z || serial->data->radius != parallel->data->radius || serial->data->sample != parallel->data->sample || serial->data->type != parallel->data->type)
+    if(serial->data->x != parallel->data->x || serial->data->y != parallel->data->y || serial->data->z != parallel->data->z || serial->data->radius != parallel->data->radius || serial->data->sample != parallel->data->sample || serial->data->type != parallel->data->type) {
+        std::cout << "Serial (" << serial->data->x << "," << serial->data->y << "," << serial->data->z << ") -> " << serial->data->sample << " Dim" << serial->root->index << std::endl;
+        std::cout << "Parallel (" << parallel->data->x << "," << parallel->data->y << "," << parallel->data->z << ") -> " << parallel->data->sample << " Dim" << parallel->root->index << std::endl;
         return 3;
+    }
     int lhs = test(serial->left, parallel->left);
     if(lhs == 0)
         return test(serial->right, parallel->right);
@@ -62,7 +73,7 @@ int test(node* serial, node* parallel){
 int main(int argc, char* argv[]){
 	std::string swc_file, rpl_file;
 	bool parallel = false;
-	int heuristic_id = 0, n, c;
+    long unsigned int heuristic_id = 0, n, c;
 
 	switch(argc){
 		case 5:
@@ -86,7 +97,7 @@ int main(int argc, char* argv[]){
 				parallel = true;
                 heuristic_id = argv[1][2] - '0';
 
-				if(heuristic_id < 0 || heuristic_id > 4){
+				if(heuristic_id > 4){
 					std::cout << "Unkown parameter: \"" << argv[1] << "\"" << std::endl;
 					usage(argv[0]);
 					return 128;
@@ -106,6 +117,7 @@ int main(int argc, char* argv[]){
 
     //std::cout << "Reading file: " << swc_file;
     auto neuron_description = parseSWC(swc_file);
+
     auto network = parseRPL(rpl_file, neuron_description);
     //std::cout << " Done!" << std::endl;
 
@@ -125,9 +137,29 @@ int main(int argc, char* argv[]){
         //=========================================================
         //===================== BUILD =============================
         //=========================================================
-        #pragma omp parallel for default(none) shared(nodes, network, neuron_description, heuristic_id, heuristic_funcs, std::cout)
-        for(int i = 0; i < network.size(); i++){
+        #pragma omp parallel for default(none) shared(nodes, network, neuron_description, heuristic_id, heuristic_funcs)
+        for(long unsigned int i = 0; i < network.size(); i++){
             nodes[i] = build_parallel(network[i], 0, nullptr, heuristic_funcs[heuristic_id]);
+            /*node* serial = build_serial(network[i], 0, nullptr);
+            int testFlag = test(serial, nodes[i]);
+            if(count_nodes(serial) != count_nodes(nodes[i]) && count_nodes(serial) != network[i].size()){
+                std::cout << "Error: " << count_nodes(serial) << " != " << count_nodes(nodes[i]) << std::endl;
+                return 1;
+            }
+            if(testFlag == 1){
+                std::cout << "Serial build failed " << i << std::endl;
+                exit(1);
+            }else if(testFlag == 2){
+                std::cout << "Parallel build failed " << i << std::endl;
+                exit(1);
+            }else if(testFlag == 3){
+                std::cout << "Different values " << i << std::endl;
+                print(serial,0);
+                std::cout << "----------------------------------" << std::endl;
+                print(nodes[i],0);
+
+                exit(1);
+            }*/
         }
         end_build = std::chrono::high_resolution_clock::now();
 
@@ -136,39 +168,37 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        #pragma omp parallel for default(none) shared(nodes, query, result, n)
-        for(int i = 0; i < nodes.size(); i++){
+        std::vector<compartment*> query_result(network.size(), nullptr);
+        //#pragma omp parallel for default(none) shared(nodes, query, query_result, n, std::cout)
+        for(long unsigned int i = 0; i < nodes.size(); i++){
             if(i == n) continue;
-            node* elem = nodes[i];
-            compartment* res = find_nearest(elem, query, 3.0);
-            if(res != nullptr){
-                #pragma omp critical (result)
-                result.push_back(res);
-            }
+            double dist = std::numeric_limits<double>::max();
+            query_result[i] = find_nearest(nodes[i], query, 3.0, dist);
         }
         end_query = std::chrono::high_resolution_clock::now();
+        for(auto & i : query_result)
+            if(i != nullptr) result.push_back(i);
     }else{
         //=========================================================
         //===================== BUILD =============================
         //=========================================================
-        for(neuron & i : network){
-            node* tree = build_serial(i, 0, nullptr);
-            nodes.push_back(tree);
+        for(long unsigned int i = 0; i < nodes.size(); i++){
+            nodes[i] = build_serial(network[i], 0, nullptr);
         }
         end_build = std::chrono::high_resolution_clock::now();
-
 
         //=========================================================
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-
-        for(int i = 0; i < nodes.size(); i++){
+        for(long unsigned int i = 0; i < nodes.size(); i++){
             if(i == n) continue;
-            node* elem = nodes[i];
-            compartment* res = find_nearest(elem, query, 3.0);
-            if(res != nullptr && query != res)
+            double dist = std::numeric_limits<double>::max();
+            compartment* res = find_nearest(nodes[i], query, 3.0, dist);
+            if(res != nullptr){
+                std::cout << "Hit found: " << i << std::endl;
                 result.push_back(res);
+            }
         }
         end_query = std::chrono::high_resolution_clock::now();
     }

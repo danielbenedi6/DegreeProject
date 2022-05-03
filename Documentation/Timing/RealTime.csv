@@ -27,3 +27,6 @@ Date;Begining;End;Description
 26/04/2022;10:00;13:00;Extend basic models with heuristics: Implementing variance heuristic
 27/04/2022;11:00;13:00;Extend basic models with heuristics: Implementing curve complexity heuristic
 27/04/2022;17:30;19:00;Extend basic models with heuristics: Implementing surface area heuristic
+02/05/2022;10:30;14:00;Extend basic models with heuristics: Improving performance
+02/05/2022;15:00;16:30;Extend basic models with heuristics: Fixing bugs
+03/05/2022;08:50;13:00;Extend basic models with heuristics: Implementing new heuristic and fixing bugs

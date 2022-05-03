@@ -12,7 +12,7 @@ for file in ./tests/"${OUTPUT}"/*.rpl; do
 	for method in ${methods[@]}; do
 		{
       		echo -n "${method},$( basename "${file}" | sed 's/^0*\(.*\)_\(.*\).rpl/\1,\2/' ),";
-	      	./bin/main -"${method}" tests/interneuron.CNG.swc "$file" $n $c || echo "${method} ${file} $n $c"
+	      	TIME=$( timeout 15.5 ./bin/main -"${method}" tests/interneuron.CNG.swc "$file" "$n" "$c" )
 		} >> "${OUTPUT}.csv"
 	done
   done

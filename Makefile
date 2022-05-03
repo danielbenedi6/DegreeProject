@@ -8,11 +8,12 @@
 #---------------------------------------------------------
 # macros
 RM = /bin/rm -rf
-CC = /usr/bin/g++
+CC = /usr/bin/g++-11
 DOCS = doxygen
 #---------------------------------------------------------
 # vars
 EXEC = main
+
 
 
 SRC_DIR = src
@@ -27,7 +28,7 @@ GEN_DOCS = latex
 
 #---------------------------------------------------------
 # flags
-CPPFLAGS= -std=gnu++11 -fopenmp -pthread -O3
+CPPFLAGS= -std=c++17 -fopenmp -pthread -O3
 
 all: $(EXEC)
 #---------------------------------------------------------

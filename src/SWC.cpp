@@ -87,14 +87,19 @@ std::vector<neuron> parseRPL(const std::string& filename, const neuron& n){
             res.push_back(new compartment(*c));
         }
 
-        // Read the operations
-        while(buff){
-            int op, ax;
-            double val;
+        if(output.size() == 12456){
+            std::cout << "";
+        }
 
-            buff >> op;
-            buff >> ax;
-            buff >> val;
+        // Read the operations
+
+        int op, ax;
+        double val;
+        buff >> op;
+        buff >> ax;
+        buff >> val;
+        while(buff){
+
 
 
             if(op == 0){ //Translation
@@ -123,6 +128,10 @@ std::vector<neuron> parseRPL(const std::string& filename, const neuron& n){
                     }
                 }
             }
+
+            buff >> op;
+            buff >> ax;
+            buff >> val;
         }
 
         output.push_back(res);
