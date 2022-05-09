@@ -196,7 +196,6 @@ int main(int argc, char* argv[]){
             double dist = std::numeric_limits<double>::max();
             compartment* res = find_nearest(nodes[i], query, 3.0, dist);
             if(res != nullptr){
-                std::cout << "Hit found: " << i << std::endl;
                 result.push_back(res);
             }
         }
