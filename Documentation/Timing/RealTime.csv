@@ -9,7 +9,7 @@ Date;Begining;End;Description
 28/03/2022;11:50;13:15;Implement basic models and test: Understanding implementation and OpenMP
 29/03/2022;17:15;18:45;Implement basic models and test: Debugging serial kd-tree and implementing parallel kd-tree
 30/03/2022;10:30;11:15;Implement basic models and test: Implementing parallel kd-tree
-30/03/2022:11:15;13:45;Experiment and acquire metrics: Benchmarking serial and parallel kd-tree
+30/03/2022;11:15;13:45;Experiment and acquire metrics: Benchmarking serial and parallel kd-tree
 31/03/2022;11:00;11:45;Implement basic models and test: Optimizing building kd-tree
 31/03/2022;11:45;12:30;Experiment and acquire metrics: Redoing benchmarks
 04/04/2022;16:00;18:20;Implement basic models and test: debugging parallel kd-tree
@@ -27,6 +27,14 @@ Date;Begining;End;Description
 26/04/2022;10:00;13:00;Extend basic models with heuristics: Implementing variance heuristic
 27/04/2022;11:00;13:00;Extend basic models with heuristics: Implementing curve complexity heuristic
 27/04/2022;17:30;19:00;Extend basic models with heuristics: Implementing surface area heuristic
+28/04/2022;08:40;12:00;Experiment and acquire metrics: Setting up remote machine and running
 02/05/2022;10:30;14:00;Extend basic models with heuristics: Improving performance
 02/05/2022;15:00;16:30;Extend basic models with heuristics: Fixing bugs
 03/05/2022;08:50;13:00;Extend basic models with heuristics: Implementing new heuristic and fixing bugs
+03/05/2022;19:30;21:00;Experiment and acquire metrics: Setting up remote machine and running
+05/05/2022;20:00;21:15;Experiment and acquire metrics: Getting intermediate results and plotting
+09/05/2022;14:50;16:20;Experiment and acquire metrics: Setting up remote machine and new densities test
+10/05/2022;09:50;10:15;Expermient and acquire metrics: Check yesterday's results and repeat experiments because of an error
+10/05/2022;10:15;13:15;Report: Write abstract and introduction
+10/05/2022;16:00;20:10;Report: Finish chapter 1
+
