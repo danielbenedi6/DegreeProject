@@ -24,7 +24,16 @@ This project aims to compare different heuristics used in computer graphics conc
 \textbf{How does the usage of heuristics in Kd-trees affect the performance of touch dectetion in neuronal morphometrics? }
 
 \section{Scope and delimitations}
-This thesis will focus on
+This thesis will focus on analyzing the performance of four heuristics in Kd-trees: Surface Area Heuristic (SAH) and Curve Complexity Heuristic (CCH), these two are common in computer graphics, and the other two are our own proposal, the median of the hyperplane with maximum variance split and minimum variance union split. We test the Kd-trees data structure in serial and parallel execution.
+
+We use a specific type of neuron called a fast-spiking interneuron to evaluate the performance. Fast-spiking interneuron allows every kind of synapse, not only the axodendritic. We evaluate two different cases: 
+\begin{itemize}
+    \item Given a realistic density, try a different number of neurons.
+    \item Given a certain number of neurons, try different densities. 
+\end{itemize}
+Furthermore, we will try to extrapolate with densities larger than the commons for interneurons to test how these heuristics will affect the performance of different neurons.
+
+However, this thesis will perform all measurements on a personal computer. Due to the project's time frame, all the desired measurement will not be possible.
 
 \section{Thesis outline}
 The background (Chapter \ref{chapter:background}) presents the used data structure and relevant algorithms as well as the libraries used in this thesis. The methods (Chapter \ref{chapter:methods}) explain in detail how measurements were made and the motivations for choices made. The measurements are then presented in the result chapter (Chapter \ref{chapter:results}) with the corresponding analysis. Subsequently, the results are discussed in the discussion chapter (Chapter \ref{chapter:discussion}) and a conclusion is presented  (Chapter \ref{chapter:conclusion}).
