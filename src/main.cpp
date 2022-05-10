@@ -169,7 +169,7 @@ int main(int argc, char* argv[]){
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
         std::vector<compartment*> query_result(network.size(), nullptr);
-        //#pragma omp parallel for default(none) shared(nodes, query, query_result, n, std::cout)
+        #pragma omp parallel for default(none) shared(nodes, query, query_result, n, std::cout)
         for(long unsigned int i = 0; i < nodes.size(); i++){
             if(i == n) continue;
             double dist = std::numeric_limits<double>::max();
