@@ -30,10 +30,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Write an abstract. Introduce the subject area for the project and describe the problems that are solved and described in the thesis. Present how the problems have been solved, methods used and present results for the project. Use probably one sentence for each chapter in the final report.
-
-The presentation of the results should be the main part of the abstract. Use about ½ A4-page.
-English abstract
+Neuroscience has benefited from neuronal network simulation and an important task in the simulation is finding points in space where two neurites approach each other so a synapse could be formed. The task of finding the touching points could be seen as similar to the ray collision in ray tracing in computer graphics. This thesis aimed to investigate if the heuristics used in computer graphics to speed up ray tracing can be used in the neurite touchpoint task. For analysis, we measured the time used for building the kd-trees (one per neuron), the time for querying and the memory usage. The tests were made using one specific neuron type called interneuron and realistic densities. This was made for simplicity, but the only difference with other types of neurons is the conditions for generating a touching point. It was found that due to their density, the interneurons do not benefit from these heuristics.
 
 
 \newpage
@@ -41,19 +38,9 @@ English abstract
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%	 The Swedish abstract         %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter*{Abstract}
+\chapter*{Sammanfattning}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Svenskt abstract
-Svensk version av abstract – samma titel på svenska som på engelska.
-
-Skriv samma abstract på svenska. Introducera ämnet för projektet och beskriv problemen som löses i materialet. Presentera
-
-
-\newpage
-\thispagestyle{plain}
-\chapter*{Acknowledgements}
-Write a short acknowledgements. Don't forget to give some credit to the examiner and supervisor.
-
+Neurovetenskap har tagit nytta av neurala nätverkssimulering och en viktig uppgift i simuleringar är att hitta punkter i rymden där två neuriter närmar sig varandra så att en synaps kan bildas. Uppgiften att hitta beröringspunkter påminner om strålkollision vid strålspårning i datorgrafik. Denna studie syftar till att undersöka huruvida heuristiken som används i datorgrafik för att påskynda strålföljning kan appliceras i neuron beröringspunktsproblem. För analys mätte vi tiden som tar för att bygga en algoritm med namnet kdtrees (en per neuron), tid för beräkningar, samt minnesanvändning. Testerna gjordes genom att använda en specifik neurontyp som kallas för interneuron och realistiska tätheter. Interneuroner är valda för att förenkla metodiken i studien, men den enda skillnaden mellan interneuron och andra typer av neuroner är tillståndet att generera en beröringspunkt. Resultaten visar att på grund av neurondensitet, en interneuron får ingen nytta av heuristiken i datorgrafik.
 \newpage
 
 \etocdepthtag.toc{mtchapter}
