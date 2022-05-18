@@ -1,2 +1,63 @@
 \chapter{Results}
 \label{chapter:results}
+The results presented were obtained from 5 individual runs for each test case to avoid outliers bias our results. The ranges for each test case (section \ref{methods:tests}) were sampled with 200 points each, except the range to extrapolate the results to other cases that was sampled with 450 points. The mean performance of each heuristic is shown in milliseconds.
+
+\section{Neuron Density}
+\subsection{Computation time}
+Benchmarks for different densities were made in the range 50-85000 neurons/$mm^3$ with different heuristics. The figure \ref{fig:density} shows in the left graph the average building time of the $k$-d tree, the middle graph shows its performance when doing the query and the right graph show how many touchpoints were detected. Due to memory usage for surface area heuristic and time consumption for minimum variance union, they were not out of the usage limits.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/density_comparation.svg}
+  \caption{Performance when varying density}
+  \label{fig:density}
+\end{figure}
+
+\subsection{Average approximation}
+Using the previous benchmark, a fitting to two different functions, $m*n+c \in \mathcal{O}(n)$ and $m*log(n)+c \in \mathcal{O}(log(n))$, were made. The figure \ref{fig:approx_density} shows how it fits for every heuristic and the table \ref{tab:density} shows the values of the fitted parameters and the coefficient of determination, $R^2$.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/density_approximation.svg}
+  \caption{Approximation to different curves for each benchmark}
+  \label{fig:approx_density}
+\end{figure}
+\input{tables/density_approximation.tex}
+
+\section{Amount of neurons}
+\subsection{Computation time}
+Benchmarks for different amount of neurons were made in the range 150-20000 neurons/$mm^3$ with different heuristics. The figure \ref{fig:neurons} shows in the left graph the average building time of the $k$-d tree, the middle graph shows its performance when doing the query and the right graph show how many touchpoints were detected.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/neurons_comparation.svg}
+  \caption{Performance when varying amount of neurons}
+  \label{fig:neurons}
+\end{figure}
+
+\subsection{Average approximation}
+Using the previous benchmark, a fitting to two different functions, $m*n+c \in \mathcal{O}(n)$ and $m*log(n)+c \in \mathcal{O}(log(n))$, were made. The figure \ref{fig:approx_neurons} shows how it fits for every heuristic and the table \ref{tab:neurons} shows the values of the fitted parameters and the coefficient of determination, $R^2$.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/neurons_approximation.svg}
+  \caption{Approximation to different curves for each benchmark}
+  \label{fig:approx_neurons}
+\end{figure}
+\input{tables/neurons_approximation.tex}
+
+\section{Extrapolation}
+\subsection{Computation time}
+Benchmarks for different densities out of realistic values were made in the range 150-20000 neurons/$mm^3$ for different heuristics to try to extrapolate the results to other types of neuronal networks. The figure \ref{fig:extrapolation} shows in the left graph the average building time of the $k$-d tree, the middle graph shows its performance when doing the query and the right graph show how many touchpoints were detected.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/density_2_comparation.svg}
+  \caption{Performance when extrapolating results with density}
+  \label{fig:extrapolation}
+\end{figure}
+
+\subsection{Average approximation}
+Using the previous benchmark, a fitting to two different functions, $m*n+c \in \mathcal{O}(n)$ and $m*log(n)+c \in \mathcal{O}(log(n))$, were made. The figure \ref{fig:approx_extrapolation} shows how it fits for every heuristic and the table \ref{tab:extrapolation} shows the values of the fitted parameters and the coefficient of determination, $R^2$. Due to memory usage for surface area heuristic and time consumption for minimum variance union, they were not out of the usage limits.
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/benchmarks/density_2_approximation.svg}
+  \caption{Approximation to different curves for each benchmark}
+  \label{fig:approx_extrapolation}
+\end{figure}
+\input{tables/density_2_approximation.tex}
