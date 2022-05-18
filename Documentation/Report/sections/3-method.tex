@@ -7,7 +7,7 @@
 First of all, we chose to reconstruct the neuronal network based on a single neuron, a fast-spiking interneuron. \href{https://neuromorpho.org/}{NeuroMorpho.Org} \cite{Neuromorpho1,Neuromorpho2} is an archive containing multiple reconstructions of different types of neurons from across different researches. The choice was completely arbitrary and was made to simplify the biological complexity of the problem while keeping the computational complexity because fast-spiking interneurons allow the creation of any kind of synapse. The exact neuron was "NMO\_36576" from one research of 2013 \cite{interneuron}, the figure \ref{fig:interneuron} contains a representation of this neuron. This specimen belonged to the subiculum of a rat and one characteristic of note is that the neuron spatial distribution is not uniformed, $298.75 \mu m$ x $538.69 \mu m$ x $66.28 \mu m$.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.75\textwidth]{setup/img/interneuron.png}
+    \includegraphics[width=0.75\textwidth]{figures/interneuron.png}
     \caption{Fast-spiking interneuron used in the thesis.}
     \label{fig:interneuron}
 \end{figure}
@@ -301,7 +301,8 @@ On a sight, it is trivial to see that the computational cost in the worst case i
 \section{Task parallelization}
 \href{https://www.openmp.org/}{OpenMP} 5.2 was used to introduce parallel programming. OpenMP is an API to implement shared-memory multiprocessing programming in C, C++ and Fortran. To avoid any race condition and to maximize the parallelization of the processes, it was only applied when there were no shared resources between the possible sub-processes. It was widely used for creating the subtrees, where every time that it was needed to call recursively the building function with a subset of the data points, it was done with parallel tasks. Also, when performing the query makes use of parallelizing the search of all the k-d trees.
 
-\section{Test cases}
+\section{Test cases
+    \label{methods:tests}}
 Firstly, the distance to define a touchpoint was fixed to $3 \mu m$. Although it could seem to be arbitrary, it was the middle value between $0.5 \mu m$ and $5 \mu m$, the range proposed by other studies \cite{10.3389/fncom.2015.00120, doi:10.1073/pnas.1202128109}. Once the distance to define a touchpoint was fixed, there were two possible variables to vary for benchmarking the scalability of the data structure and heuristics. The variable for each test case is the number of neurons of the neuronal network given the density and the neuron density of the search space given the number of neurons.
 
 In order to reach realistic values for the number of neurons, we fixed the density to 16991 neurons/$mm^3$ \cite{Trujillo-Estrada2014-uv}, but there could be other densities such us 2048neurons/$mm^3$ and 2790neurons/$mm^3$ \cite{Keller2018-dm} according to our neuron that is a fast-spiking interneuron in the subiculum. The number of neurons was a range between 150 neurons and 85000 neurons. This number is lower than the total amount of any type of neurons in the subiculum of a rat brain which is between 46000 and 330000 neurons \cite{Mulders1997-bh}.
