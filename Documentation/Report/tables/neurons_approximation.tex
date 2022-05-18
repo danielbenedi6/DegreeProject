@@ -1,0 +1,17 @@
+\begin{table}[!ht]
+\centering
+\caption{Approximation of the query time for different heuristic to some functions}
+~\\
+\label{tab:neurons}
+\begin{tabular}{l|lll|lll|}
+\cline{2-7}
+                                                                      & \multicolumn{3}{l|}{m*n+c}                                                          & \multicolumn{3}{l|}{m*log(n)+c}                                                          \\ \hline
+\multicolumn{1}{|l|}{Heuristic}                                       & \multicolumn{1}{l|}{Slope}   & \multicolumn{1}{l|}{Bias}     & $R^2$ & \multicolumn{1}{l|}{Slope}     & \multicolumn{1}{l|}{Bias}        & R\textasciicircum{}2 \\ \hline
+\multicolumn{1}{|l|}{Serial canonical splitting}                      & \multicolumn{1}{l|}{0.04975} & \multicolumn{1}{l|}{-1.93794} & 0.99865              & \multicolumn{1}{l|}{936.47290} & \multicolumn{1}{l|}{-7738.1621}  & 0.77479              \\ \hline
+\multicolumn{1}{|l|}{Parallel canonical splitting}                    & \multicolumn{1}{l|}{0.01246} & \multicolumn{1}{l|}{-1.29551} & 0.99958              & \multicolumn{1}{l|}{235.04158} & \multicolumn{1}{l|}{-1943.93362} & 0.77944              \\ \hline
+\multicolumn{1}{|l|}{Parallel curve complexity heuristic}             & \multicolumn{1}{l|}{0.01319} & \multicolumn{1}{l|}{-0.75093} & 0.99956              & \multicolumn{1}{l|}{248.93553} & \multicolumn{1}{l|}{-2058.14906} & 0.77913              \\ \hline
+\multicolumn{1}{|l|}{Parallel median of hyperplane with max variance} & \multicolumn{1}{l|}{0.01337} & \multicolumn{1}{l|}{0.85753}  & 0.99955              & \multicolumn{1}{l|}{252.65924} & \multicolumn{1}{l|}{-2087.86438} & 0.78123              \\ \hline
+\multicolumn{1}{|l|}{Parallel minimum variance union}                 & \multicolumn{1}{l|}{0.01741} & \multicolumn{1}{l|}{-0.09999} & 0.99699              & \multicolumn{1}{l|}{27.746100} & \multicolumn{1}{l|}{-172.11974}  & 0.92816              \\ \hline
+\end{tabular}
+\end{table}
+
