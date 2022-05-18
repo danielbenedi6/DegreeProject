@@ -1,0 +1,18 @@
+\begin{table}[!ht]
+\centering
+~\\
+\label{tab:density}
+\resizebox{\textwidth}{!}{\begin{tabular}{l|lll|lll|}
+\cline{2-7}
+                                                                      & \multicolumn{3}{l|}{m*n+c}                                                          & \multicolumn{3}{l|}{m*log(n)+c}                                                          \\ \hline
+\multicolumn{1}{|l|}{Heuristic}                                       & \multicolumn{1}{l|}{Slope}   & \multicolumn{1}{l|}{Bias}     & $R^2$ & \multicolumn{1}{l|}{Slope}     & \multicolumn{1}{l|}{Bias}        & $R^2$ \\ \hline
+
+\multicolumn{1}{|l|}{Serial canonical splitting} &  \multicolumn{1}{l|}{0.00081} &  \multicolumn{1}{l|}{1247.19350} &  0.03084 & \multicolumn{1}{l|}{4.05824} &  \multicolumn{1}{l|}{1219.13713} &  0.02088 \\ \hline
+\multicolumn{1}{|l|}{Parallel canonical splitting} &  \multicolumn{1}{l|}{-0.00002} &  \multicolumn{1}{l|}{312.46810} &  0.00121 & \multicolumn{1}{l|}{-0.04199} &  \multicolumn{1}{l|}{312.62670} &  0.00012 \\ \hline
+\multicolumn{1}{|l|}{Parallel curve complexity heuristic} &  \multicolumn{1}{l|}{-0.00008} &  \multicolumn{1}{l|}{331.03052} &  0.01588 & \multicolumn{1}{l|}{-0.42717} &  \multicolumn{1}{l|}{334.06362} &  0.01307 \\ \hline
+\multicolumn{1}{|l|}{Parallel median of hyperplane with max variance} &  \multicolumn{1}{l|}{-0.00012} &  \multicolumn{1}{l|}{337.86543} &  0.02981 & \multicolumn{1}{l|}{-0.53776} &  \multicolumn{1}{l|}{341.46615} &  0.01643 \\ \hline
+
+\end{tabular}}
+\caption{Approximation of the query time when varying density for different heuristic to some functions}
+\end{table}
+
