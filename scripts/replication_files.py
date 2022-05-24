@@ -37,7 +37,7 @@ for i in tqdm(range(1, n+1), ncols=80):
         n2 = round((neurons/n1)**(1./2.))
         n3 = round((neurons/(n1*n2)))
 
-        out = open('tests/'+op+'/' + str(n1*n2*n3).zfill(len(str(max_neurons))) + '_' + str(density) + '.rpl', 'w')
+        out = open('../tests/'+op+'/' + str(n1*n2*n3).zfill(len(str(max_neurons))) + '_' + str(density) + '.rpl', 'w')
 
         for a in range(n1):
             for b in range(n2):

@@ -79,7 +79,7 @@ def plot2(data, iterable):
         axis.legend()
         
         #print("*{}# *{:.5f}# *{:.5f}# {:.5f} & *{:.5f}# *{:.5f}# {:.5f}"
-              .format(name[exec],res_lin.slope, res_lin.intercept,res_lin.rvalue**2,res_log.slope, res_log.intercept,res_log.rvalue**2))
+        #      .format(name[exec],res_lin.slope, res_lin.intercept,res_lin.rvalue**2,res_log.slope, res_log.intercept,res_log.rvalue**2))
         
         print("Linear regression. Heuristic: {}, R-squared: {}, Slope: {}, Bias: {}".format(exec,res_lin.rvalue**2,res_lin.slope, res_lin.intercept))
         print("Logarithm fitting. Heuristic: {}, R-squared: {}, Slope: {}, Bias: {}".format(exec,res_log.rvalue**2,res_log.slope, res_log.intercept))
@@ -87,21 +87,21 @@ def plot2(data, iterable):
         
 
 
-data = pandas.read_csv('neurons.csv')
+data = pandas.read_csv('../results/neurons.csv')
 fig1 = plot(data,"neurons")
 fig1.suptitle('Timing for different neurons with density 16991 neurons/mm³')
 #data = pandas.read_csv('neurons.csv')
 plot2(data,"neurons")
 print("Neurons plotted")
 
-data = pandas.read_csv('density.csv')
+data = pandas.read_csv('../results/density.csv')
 fig2 = plot(data, "density")
 fig2.suptitle('Timing for different densities with 25230 neurons')
 #data = pandas.read_csv('density.csv')
 plot2(data,"density")
 print("Density plotted")
 
-data = pandas.read_csv('density_2.csv')
+data = pandas.read_csv('../results/density_2.csv')
 fig3 = plot(data, "density")
 fig3.suptitle('Timing for different densities with 25230 neurons')
 #data = pandas.read_csv('density_2.csv')
