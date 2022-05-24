@@ -270,23 +270,19 @@ Due to the fact that the implemented solution uses one $k$-d tree per neuron, th
                 \If{res $\ne$ nullptr}
                     \State \Return{res}
                 \EndIf
-                \If{$ \text{root}_{\text{root}_d} - q_{\text{root}_d} \leq \text{dist}$}
-                    \State res $\gets$ FindTouchpoint($\text{root}_r,\, q,\, \text{dist}$)
-                    \If{res $\ne$ nullptr}
-                        \State \Return{res}
-                    \EndIf
-                \EndIf
+                \State res $\gets$ FindTouchpoint($\text{root}_r,\, q,\, \text{dist}$)  \label{alg:find:begin1}
+                \If{res $\ne$ nullptr}
+                    \State \Return{res}
+                \EndIf \label{alg:find:end1}
             \Else
                 \State res $\gets$ FindTouchpoint($\text{root}_r,\, q,\, \text{dist}$)
                 \If{res $\ne$ nullptr}
                     \State \Return{res}
                 \EndIf
-                \If{$q_{\text{root}_d} - \text{root}_{\text{root}_d} \leq \text{dist}$}
-                    \State res $\gets$ FindTouchpoint($\text{root}_l,\, q,\, \text{dist}$)
-                    \If{res $\ne$ nullptr}
-                        \State \Return{res}
-                    \EndIf
-                \EndIf
+                \State res $\gets$ FindTouchpoint($\text{root}_l,\, q,\, \text{dist}$)  \label{alg:find:begin2}
+                \If{res $\ne$ nullptr}
+                    \State \Return{res}
+                \EndIf \label{alg:find:end2}
             \EndIf
             \State \Return{nullptr}
         \EndIf
