@@ -146,7 +146,7 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        result = range_query_parallel(tree, query, 3.0);
+        range_query_parallel(tree, query, 3.0, result);
         end_query = std::chrono::high_resolution_clock::now();
     }else{
         //=========================================================
@@ -159,7 +159,7 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        result = range_query(tree, query, 3.0);
+        range_query(tree, query, 3.0, result);
         end_query = std::chrono::high_resolution_clock::now();
     }
 
