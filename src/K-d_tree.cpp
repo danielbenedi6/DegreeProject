@@ -89,37 +89,29 @@ inline double dist2(const compartment* lhs,const compartment* rhs){
     return (lhs->x - rhs->x)*(lhs->x - rhs->x) + (lhs->y - rhs->y)*(lhs->y - rhs->y) + (lhs->z - rhs->z)*(lhs->z - rhs->z);
 }
 
-compartment* find_nearest(node* root, const compartment* target, double dist, double& best_dist){
+compartment* find_nearest(node* root, const compartment* target, double dist){
     if(root == nullptr) return nullptr;
 
     double d = dist2(root->data, target);
+    compartment* res = nullptr;
 
     if ((d - dist*dist) <= 1e-6){
         //Touch point found
-        best_dist = d;
         return root->data;
     }else{
         if(target->get(root->index) < root->data->get(root->index)){
-            if((target->get(root->index) - best_dist) <= root->data->get(root->index)){
-                compartment* res = find_nearest(root->left, target, dist, best_dist);
-                if(res != nullptr) return res;
-            }
-            if((target->get(root->index) + best_dist) > root->data->get(root->index)){
-                compartment* res = find_nearest(root->right, target, dist, best_dist);
-                if(res != nullptr) return res;
+            res = find_nearest(root->left, target, dist);
+            if(res == nullptr && (root->data->get(root->index) - target->get(root->index)) <= dist){
+                res = find_nearest(root->right, target, dist);
             }
         }else{
-            if((target->get(root->index) + best_dist) > root->data->get(root->index)){
-                compartment* res = find_nearest(root->right, target, dist, best_dist);
-                if(res != nullptr) return res;
-            }
-            if((target->get(root->index) - best_dist) <= root->data->get(root->index)){
-                compartment* res = find_nearest(root->left, target, dist, best_dist);
-                if(res != nullptr) return res;
+            res = find_nearest(root->right, target, dist);
+            if(res == nullptr && (target->get(root->index) - root->data->get(root->index)) <= dist){
+                res = find_nearest(root->left, target, dist);
             }
         }
     }
-    return nullptr;
+    return res;
 
     /*
     if( d < best_dist){

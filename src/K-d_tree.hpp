@@ -36,4 +36,4 @@ node* build_parallel(neuron& net, int depth, node* parent, heuristic_func heuris
  */
 void free(node* root);
 
-compartment* find_nearest(node* root, const compartment* target, double dist, double& best_dist);
+compartment* find_nearest(node* root, const compartment* target, double dist);

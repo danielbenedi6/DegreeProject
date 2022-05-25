@@ -172,8 +172,7 @@ int main(int argc, char* argv[]){
         #pragma omp parallel for default(none) shared(nodes, query, query_result, n, std::cout)
         for(long unsigned int i = 0; i < nodes.size(); i++){
             if(i == n) continue;
-            double dist = std::numeric_limits<double>::max();
-            query_result[i] = find_nearest(nodes[i], query, 3.0, dist);
+            query_result[i] = find_nearest(nodes[i], query, 3.0);
         }
         end_query = std::chrono::high_resolution_clock::now();
         for(auto & i : query_result)
@@ -193,8 +192,7 @@ int main(int argc, char* argv[]){
         start_query = std::chrono::high_resolution_clock::now();
         for(long unsigned int i = 0; i < nodes.size(); i++){
             if(i == n) continue;
-            double dist = std::numeric_limits<double>::max();
-            compartment* res = find_nearest(nodes[i], query, 3.0, dist);
+            compartment* res = find_nearest(nodes[i], query, 3.0);
             if(res != nullptr){
                 result.push_back(res);
             }
