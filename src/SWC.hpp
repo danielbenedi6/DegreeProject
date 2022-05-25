@@ -9,6 +9,7 @@
  * http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html
  */
 struct compartment{
+    std::int64_t neuron_id;
 	std::int64_t sample;
 	std::int64_t parent;
 	double   x;
@@ -62,3 +63,6 @@ compartment* getCompartment(std::istream& input);
  * @return The neuronal network replicated according with the input file.
  */
 std::vector<neuron> parseRPL(const std::string& filename, const neuron& n);
+
+
+neuron flatten(const std::vector<neuron>& network);

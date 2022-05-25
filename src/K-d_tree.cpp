@@ -112,17 +112,73 @@ compartment* find_nearest(node* root, const compartment* target, double dist){
         }
     }
     return res;
+}
 
-    /*
-    if( d < best_dist){
-        best_dist = d;
-        return root->data;
+void range_query(node* root, const compartment* target, double dist, std::vector<compartment*>& result){
+    if(root == nullptr) return;
+    double d = dist2(root->data, target);
+
+    if((d - dist*dist) <= 1e-6 && target->neuron_id != root->data->neuron_id){
+        //Touchpoint found
+        result.push_back(root->data);
     }
-    if(d < dist*dist) return root->data;
-    double dx = root->data->get(root->index) - target->get(root->index);
-    compartment* result = find_nearest(dx > 0 ? root->left : root->right, target, dist, best_dist);
-    if(result != nullptr) return result;
-    if(dx*dx > best_dist) return nullptr;
-    return find_nearest(dx > 0 ? root->right : root->left, target, dist, best_dist);
-     */
+    if(target->get(root->index) < root->data->get(root->index)){
+        range_query(root->left, target, dist, result);
+        if((root->data->get(root->index) - target->get(root->index)) <= dist){
+            range_query(root->right, target, dist, result);
+        }
+    }else{
+        range_query(root->right, target, dist, result);
+        if((target->get(root->index) - root->data->get(root->index)) <= dist){
+            range_query(root->left, target, dist, result);
+        }
+    }
+}
+
+void range_query_tasks(node* root, const compartment* target, double dist, std::vector<compartment*>& result){
+    if(root == nullptr) return;
+
+    #pragma omp task default(none) shared(root, target, dist, result)
+    {
+        double d = dist2(root->data, target);
+        if((d - dist*dist) <= 1e-6 && target->neuron_id != root->data->neuron_id){
+            //Touchpoint found
+            result.push_back(root->data);
+        }
+    };
+    if(target->get(root->index) < root->data->get(root->index)){
+        #pragma omp task default(none) shared(root, target, dist, result)
+        {
+            range_query(root->left, target, dist, result);
+        };
+        #pragma omp task default(none) shared(root, target, dist, result)
+        {
+            if((root->data->get(root->index) - target->get(root->index)) <= dist){
+                range_query(root->right, target, dist, result);
+            }
+        };
+    }else {
+        #pragma omp task default(none) shared(root, target, dist, result)
+        {
+            range_query(root->right, target, dist, result);
+        };
+        #pragma omp task default(none) shared(root, target, dist, result)
+        {
+            if((target->get(root->index) - root->data->get(root->index)) <= dist){
+                range_query(root->left, target, dist, result);
+            }
+        };
+    }
+    #pragma omp taskwait
+}
+
+void range_query_parallel(node* root, const compartment* target, double dist, std::vector<compartment*>& result){
+    if(root == nullptr) return;
+
+    #pragma omp parallel default(none) shared(root,target,dist,result)
+    #pragma omp single
+    {
+        range_query_tasks(root,target,dist,result);
+        #pragma omp taskwait
+    }
 }

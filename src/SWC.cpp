@@ -60,6 +60,7 @@ compartment* getCompartment(std::istream& input){
 	buff >> res->z;
 	buff >> res->radius;
 	buff >> res->parent;
+    res->neuron_id = -1;
 
 	return res;
 }
@@ -153,4 +154,18 @@ double compartment::get(const int dimension) const{
         default:
             return NAN;
     }
+}
+
+neuron flatten(const std::vector<neuron>& network){
+    neuron res = neuron();
+
+    for(int i = 0; i < network.size(); i++){
+        neuron elem = network[i];
+        for(compartment* point : elem){
+            point->neuron_id = i;
+            res.push_back(point);
+        }
+    }
+
+    return res;
 }

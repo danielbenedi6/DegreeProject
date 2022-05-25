@@ -37,3 +37,7 @@ node* build_parallel(neuron& net, int depth, node* parent, heuristic_func heuris
 void free(node* root);
 
 compartment* find_nearest(node* root, const compartment* target, double dist);
+
+
+void range_query(node* root, const compartment* target, double dist, std::vector<compartment*>& result);
+void range_query_parallel(node* root, const compartment* target, double dist, std::vector<compartment*>& result);

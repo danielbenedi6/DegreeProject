@@ -125,42 +125,20 @@ int main(int argc, char* argv[]){
     std::cout << neuron_description.size() << " compartments" << std::endl;
     std::cout << network.size() << " neurons" << std::endl;
     */
+    auto flat = flatten(network);
 
     auto end_build = std::chrono::high_resolution_clock::now();
     auto start_build = std::chrono::high_resolution_clock::now();
     auto end_query = std::chrono::high_resolution_clock::now();
     auto start_query = std::chrono::high_resolution_clock::now();
-    std::vector<node*> nodes(network.size(), nullptr);
+    node* tree = nullptr;
     compartment* query = network[n][c];
     std::vector<compartment*> result;
     if(parallel){
         //=========================================================
         //===================== BUILD =============================
         //=========================================================
-        #pragma omp parallel for default(none) shared(nodes, network, neuron_description, heuristic_id, heuristic_funcs)
-        for(long unsigned int i = 0; i < network.size(); i++){
-            nodes[i] = build_parallel(network[i], 0, nullptr, heuristic_funcs[heuristic_id]);
-            /*node* serial = build_serial(network[i], 0, nullptr);
-            int testFlag = test(serial, nodes[i]);
-            if(count_nodes(serial) != count_nodes(nodes[i]) && count_nodes(serial) != network[i].size()){
-                std::cout << "Error: " << count_nodes(serial) << " != " << count_nodes(nodes[i]) << std::endl;
-                return 1;
-            }
-            if(testFlag == 1){
-                std::cout << "Serial build failed " << i << std::endl;
-                exit(1);
-            }else if(testFlag == 2){
-                std::cout << "Parallel build failed " << i << std::endl;
-                exit(1);
-            }else if(testFlag == 3){
-                std::cout << "Different values " << i << std::endl;
-                print(serial,0);
-                std::cout << "----------------------------------" << std::endl;
-                print(nodes[i],0);
-
-                exit(1);
-            }*/
-        }
+        tree = build_parallel(flat, 0, nullptr, heuristic_funcs[heuristic_id]);
         end_build = std::chrono::high_resolution_clock::now();
 
 
@@ -168,42 +146,25 @@ int main(int argc, char* argv[]){
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        std::vector<compartment*> query_result(network.size(), nullptr);
-        #pragma omp parallel for default(none) shared(nodes, query, query_result, n, std::cout)
-        for(long unsigned int i = 0; i < nodes.size(); i++){
-            if(i == n) continue;
-            query_result[i] = find_nearest(nodes[i], query, 3.0);
-        }
+        result = range_query_parallel(tree, query, 3.0);
         end_query = std::chrono::high_resolution_clock::now();
-        for(auto & i : query_result)
-            if(i != nullptr) result.push_back(i);
     }else{
         //=========================================================
         //===================== BUILD =============================
         //=========================================================
-        for(long unsigned int i = 0; i < nodes.size(); i++){
-            nodes[i] = build_serial(network[i], 0, nullptr);
-        }
+        tree = build_serial(flat,0,nullptr);
         end_build = std::chrono::high_resolution_clock::now();
 
         //=========================================================
         //===================== QUERY =============================
         //=========================================================
         start_query = std::chrono::high_resolution_clock::now();
-        for(long unsigned int i = 0; i < nodes.size(); i++){
-            if(i == n) continue;
-            compartment* res = find_nearest(nodes[i], query, 3.0);
-            if(res != nullptr){
-                result.push_back(res);
-            }
-        }
+        result = range_query(tree, query, 3.0);
         end_query = std::chrono::high_resolution_clock::now();
     }
 
 
-    //print(tree, 0);
-    for(node* tree : nodes)
-        free(tree);
+    free(tree);
 
     auto duration_build = std::chrono::duration_cast<std::chrono::microseconds>(end_build - start_build).count();
     auto duration_query = std::chrono::duration_cast<std::chrono::microseconds>(end_query - start_query).count();
